@@ -32,8 +32,8 @@ appBarCustom(BuildContext context, {Color? backgroundColor, Color? iconColor, Fu
         child: Container( 
           padding: const EdgeInsets.fromLTRB(10, 0, 0, 0), 
           child: FaIcon(
-            LineAwesomeIcons.arrow_left_solid, 
-            color:iconColor ?? CustomColors.dark,
+            LineAwesomeIcons.chevron_left_solid, 
+            color:iconColor ?? CustomColors.white,
             size: 25
           ),
         ), 
