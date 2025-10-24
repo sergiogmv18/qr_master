@@ -1,4 +1,9 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.qr_master">
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    
     <application
         android:usesCleartextTraffic="true" 
         android:allowBackup="false"

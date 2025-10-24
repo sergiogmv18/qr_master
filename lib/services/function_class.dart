@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer' as dev;
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class FunctionsClass {
 
@@ -237,6 +238,78 @@ class FunctionsClass {
       return '';
     }
   }
+
+
+    /* Launches a URL in the default browser or appropriate app.
+  * @author  SGV - 20250812
+  * @version 1.1 - 20250812 - added error handling
+  * 
+  * @param   url - The URL to launch (required)
+  * 
+  * Behavior:
+  *  - Parses the URL string into a Uri object
+  *  - Attempts to launch using the system default handler
+  *  - Throws Exception if launch fails
+  * 
+  * Usage Example:
+  *   await redirectUrl(url: "https://example.com");
+  *   // Opens in default browser
+  * 
+  * Dependencies:
+  *  - package:url_launcher (launchUrl)
+  * 
+  * Supported URL Schemes:
+  *  - http://, https://
+  *  - mailto:
+  *  - tel:
+  *  - sms:
+  * 
+  * Error Handling:
+  *  - Throws Exception with descriptive message on failure
+  *  - Validates URL format before attempting launch
+  * 
+  * Notes:
+  *  - Requires internet permission on Android
+  *  - iOS may need LSApplicationQueriesSchemes in Info.plist
+  */
+  Future<void> redirectUrl({required String url}) async {
+    // 1) Sanea: quita espacios, saltos y caracteres invisibles (BOM/ZW*)
+    var cleaned = url
+        .trim()
+        .replaceAll(RegExp(r'[\u200B-\u200D\u2060\uFEFF]'), '') // zero-width
+        .replaceAll(RegExp(r'\s+'), '');                        // espacios/saltos
+
+    // 2) Si viene entre comillas, quítalas
+    if ((cleaned.startsWith('"') && cleaned.endsWith('"')) ||
+        (cleaned.startsWith("'") && cleaned.endsWith("'"))) {
+      cleaned = cleaned.substring(1, cleaned.length - 1);
+    }
+
+    // 3) Validación mínima: http(s) y host
+    final uri = Uri.tryParse(cleaned);
+    final valid = uri != null &&
+        uri.hasScheme &&
+        (uri.scheme == 'http' || uri.scheme == 'https') &&
+        uri.host.isNotEmpty;
+
+    if (!valid) {
+      // Log útil para detectar el problema real en tu consola
+      // (ojo: no imprimas tokens sensibles en prod)
+      // ignore: avoid_print
+      print('redirectUrl() invalid -> "$cleaned" (from "$url")');
+      throw const FormatException('Invalid URL format');
+    }
+
+    // 4) Abre (para Stripe Checkout suele ir bien in-app browser)
+    final ok = await launchUrlString(
+      cleaned,
+      mode: LaunchMode.inAppBrowserView, // o externalApplication si prefieres
+    );
+    if (!ok) {
+      throw Exception('Failed to open URL: $cleaned');
+    }
+  }
+
 
 
   /*

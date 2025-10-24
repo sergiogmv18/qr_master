@@ -9,6 +9,7 @@ import 'package:qr_master/dao/user_dao.dart';
 import 'package:qr_master/models/qr_record.dart';
 import 'package:qr_master/models/suscriptions.dart';
 import 'package:qr_master/models/users.dart';
+import 'package:qr_master/services/barcode_format.dart';
 import 'package:qr_master/services/date_time_converter.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
 part 'qr_master_database.g.dart';
@@ -16,10 +17,10 @@ part 'qr_master_database.g.dart';
 
 
 
-@TypeConverters([DateTimeConverter])
+@TypeConverters([DateTimeConverter, BarcodeFormatConverter])
 @Database(
   entities: [
-    QrRecordEntity,
+    QrRecord,
     SubscriptionPurchase,
     User,
   ], 

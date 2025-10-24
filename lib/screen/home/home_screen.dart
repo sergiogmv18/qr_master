@@ -67,30 +67,28 @@ class _HomeScreenState extends State<HomeScreen> {
               //   subtitle: translate('unlimited scans • 5 free creations.'),
               // ),
 // SCAN QR
-              GestureDetector(
-                child:PlanBadgeCard(
-                  borderGradient: const LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [CustomColors.secundary, CustomColors.primary], // aqua → violeta
-                  ),
-                  child: Column(
-                    children: [
-                      Icon(Icons.qr_code_scanner, color: Colors.white, size: 50,),
-                      Text(
-                        translate('scan QR'),
-                        style:Theme.of(context).textTheme.headlineSmall!.copyWith(
-                          color: CustomColors.white
-                        ),
-                      )
-                    ],
-                  ),
-                ),
+              PlanBadgeCard(
                 onTap: () async{
                   await _onAction();
                   if(!context.mounted) return;
-                   Navigator.of(context).pushNamedAndRemoveUntil(RouteAppName.scanScreen,(route) => false);
+                  Navigator.of(context).pushNamedAndRemoveUntil(RouteAppName.scanScreen,(route) => false);
                 },
+                borderGradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [CustomColors.secundary, CustomColors.primary], // aqua → violeta
+                ),
+                child: Column(
+                  children: [
+                    Icon(Icons.qr_code_scanner, color: Colors.white, size: 50,),
+                    Text(
+                      translate('scan QR'),
+                      style:Theme.of(context).textTheme.headlineSmall!.copyWith(
+                        color: CustomColors.white
+                      ),
+                    )
+                  ],
+                ),
               ),
               
 // ADS

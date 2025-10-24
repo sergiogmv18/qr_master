@@ -100,7 +100,7 @@ class _$QrMasterDatabase extends QrMasterDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `qr_records` (`content` TEXT, `createdAt` INTEGER, `imagePath` TEXT, `fgColorHex` TEXT, `bgColorHex` TEXT, `logoPath` TEXT, `meta` TEXT, `id` INTEGER PRIMARY KEY AUTOINCREMENT, `serverId` INTEGER NOT NULL, `uuid` TEXT, `needToSynchronize` INTEGER NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `qr_records` (`content` TEXT, `createdAt` INTEGER, `imagePath` TEXT, `fgColorHex` TEXT, `bgColorHex` TEXT, `logoPath` TEXT, `meta` TEXT, `symbology` TEXT, `type` INTEGER, `id` INTEGER PRIMARY KEY AUTOINCREMENT, `serverId` INTEGER NOT NULL, `uuid` TEXT, `needToSynchronize` INTEGER NOT NULL)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `subscription_purchases` (`productId` TEXT, `purchaseToken` TEXT, `orderId` TEXT, `purchaseDate` INTEGER, `expiryDate` INTEGER, `status` TEXT, `autoRenewing` INTEGER, `packageName` TEXT, `obfuscatedAccountId` TEXT, `obfuscatedProfileId` TEXT, `purchaseType` TEXT, `originalJson` TEXT, `verificationData` TEXT, `userId` TEXT, `quantity` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT, `serverId` INTEGER NOT NULL, `uuid` TEXT, `needToSynchronize` INTEGER NOT NULL)');
         await database.execute(
@@ -135,10 +135,10 @@ class _$QrRecordEntityDao extends QrRecordEntityDao {
     this.database,
     this.changeListener,
   )   : _queryAdapter = QueryAdapter(database),
-        _qrRecordEntityInsertionAdapter = InsertionAdapter(
+        _qrRecordInsertionAdapter = InsertionAdapter(
             database,
             'qr_records',
-            (QrRecordEntity item) => <String, Object?>{
+            (QrRecord item) => <String, Object?>{
                   'content': item.content,
                   'createdAt': _dateTimeConverter.encode(item.createdAt),
                   'imagePath': item.imagePath,
@@ -146,16 +146,18 @@ class _$QrRecordEntityDao extends QrRecordEntityDao {
                   'bgColorHex': item.bgColorHex,
                   'logoPath': item.logoPath,
                   'meta': item.meta,
+                  'symbology': _barcodeFormatConverter.encode(item.symbology),
+                  'type': item.type,
                   'id': item.id,
                   'serverId': item.serverId,
                   'uuid': item.uuid,
                   'needToSynchronize': item.needToSynchronize ? 1 : 0
                 }),
-        _qrRecordEntityUpdateAdapter = UpdateAdapter(
+        _qrRecordUpdateAdapter = UpdateAdapter(
             database,
             'qr_records',
             ['id'],
-            (QrRecordEntity item) => <String, Object?>{
+            (QrRecord item) => <String, Object?>{
                   'content': item.content,
                   'createdAt': _dateTimeConverter.encode(item.createdAt),
                   'imagePath': item.imagePath,
@@ -163,16 +165,18 @@ class _$QrRecordEntityDao extends QrRecordEntityDao {
                   'bgColorHex': item.bgColorHex,
                   'logoPath': item.logoPath,
                   'meta': item.meta,
+                  'symbology': _barcodeFormatConverter.encode(item.symbology),
+                  'type': item.type,
                   'id': item.id,
                   'serverId': item.serverId,
                   'uuid': item.uuid,
                   'needToSynchronize': item.needToSynchronize ? 1 : 0
                 }),
-        _qrRecordEntityDeletionAdapter = DeletionAdapter(
+        _qrRecordDeletionAdapter = DeletionAdapter(
             database,
             'qr_records',
             ['id'],
-            (QrRecordEntity item) => <String, Object?>{
+            (QrRecord item) => <String, Object?>{
                   'content': item.content,
                   'createdAt': _dateTimeConverter.encode(item.createdAt),
                   'imagePath': item.imagePath,
@@ -180,6 +184,8 @@ class _$QrRecordEntityDao extends QrRecordEntityDao {
                   'bgColorHex': item.bgColorHex,
                   'logoPath': item.logoPath,
                   'meta': item.meta,
+                  'symbology': _barcodeFormatConverter.encode(item.symbology),
+                  'type': item.type,
                   'id': item.id,
                   'serverId': item.serverId,
                   'uuid': item.uuid,
@@ -192,16 +198,16 @@ class _$QrRecordEntityDao extends QrRecordEntityDao {
 
   final QueryAdapter _queryAdapter;
 
-  final InsertionAdapter<QrRecordEntity> _qrRecordEntityInsertionAdapter;
+  final InsertionAdapter<QrRecord> _qrRecordInsertionAdapter;
 
-  final UpdateAdapter<QrRecordEntity> _qrRecordEntityUpdateAdapter;
+  final UpdateAdapter<QrRecord> _qrRecordUpdateAdapter;
 
-  final DeletionAdapter<QrRecordEntity> _qrRecordEntityDeletionAdapter;
+  final DeletionAdapter<QrRecord> _qrRecordDeletionAdapter;
 
   @override
-  Future<List<QrRecordEntity>> fetchAll() async {
+  Future<List<QrRecord>> fetchAll() async {
     return _queryAdapter.queryList('SELECT * FROM qr_records',
-        mapper: (Map<String, Object?> row) => QrRecordEntity(
+        mapper: (Map<String, Object?> row) => QrRecord(
             serverId: row['serverId'] as int,
             id: row['id'] as int?,
             needToSynchronize: (row['needToSynchronize'] as int) != 0,
@@ -212,13 +218,16 @@ class _$QrRecordEntityDao extends QrRecordEntityDao {
             fgColorHex: row['fgColorHex'] as String?,
             bgColorHex: row['bgColorHex'] as String?,
             logoPath: row['logoPath'] as String?,
-            meta: row['meta'] as String?));
+            meta: row['meta'] as String?,
+            symbology:
+                _barcodeFormatConverter.decode(row['symbology'] as String?),
+            type: row['type'] as int?));
   }
 
   @override
-  Future<QrRecordEntity?> fetchById(int id) async {
+  Future<QrRecord?> fetchById(int id) async {
     return _queryAdapter.query('SELECT * FROM qr_records WHERE id = ?1',
-        mapper: (Map<String, Object?> row) => QrRecordEntity(
+        mapper: (Map<String, Object?> row) => QrRecord(
             serverId: row['serverId'] as int,
             id: row['id'] as int?,
             needToSynchronize: (row['needToSynchronize'] as int) != 0,
@@ -229,7 +238,10 @@ class _$QrRecordEntityDao extends QrRecordEntityDao {
             fgColorHex: row['fgColorHex'] as String?,
             bgColorHex: row['bgColorHex'] as String?,
             logoPath: row['logoPath'] as String?,
-            meta: row['meta'] as String?),
+            meta: row['meta'] as String?,
+            symbology:
+                _barcodeFormatConverter.decode(row['symbology'] as String?),
+            type: row['type'] as int?),
         arguments: [id]);
   }
 
@@ -239,20 +251,20 @@ class _$QrRecordEntityDao extends QrRecordEntityDao {
   }
 
   @override
-  Future<int> insertLocally(QrRecordEntity object) {
-    return _qrRecordEntityInsertionAdapter.insertAndReturnId(
+  Future<int> insertLocally(QrRecord object) {
+    return _qrRecordInsertionAdapter.insertAndReturnId(
         object, OnConflictStrategy.abort);
   }
 
   @override
-  Future<int> updateLocally(QrRecordEntity object) {
-    return _qrRecordEntityUpdateAdapter.updateAndReturnChangedRows(
+  Future<int> updateLocally(QrRecord object) {
+    return _qrRecordUpdateAdapter.updateAndReturnChangedRows(
         object, OnConflictStrategy.abort);
   }
 
   @override
-  Future<int> deleteLocally(QrRecordEntity object) {
-    return _qrRecordEntityDeletionAdapter.deleteAndReturnChangedRows(object);
+  Future<int> deleteLocally(QrRecord object) {
+    return _qrRecordDeletionAdapter.deleteAndReturnChangedRows(object);
   }
 }
 
@@ -751,3 +763,4 @@ class _$UserDao extends UserDao {
 
 // ignore_for_file: unused_element
 final _dateTimeConverter = DateTimeConverter();
+final _barcodeFormatConverter = BarcodeFormatConverter();

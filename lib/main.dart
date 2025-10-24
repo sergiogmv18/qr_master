@@ -4,6 +4,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_master/controllers/translation_controller.dart';
 import 'package:qr_master/provider/botton_navigator_bar_provider.dart';
+import 'package:qr_master/provider/provider_scanqr.dart';
 import 'package:qr_master/qr_master.dart';
 import 'package:qr_master/services/service_locator.dart';
 
@@ -30,6 +31,7 @@ void main() async {  // Añade async aquí
       providers: [
         ChangeNotifierProvider.value(value: TranslationController.getInstance()),
         ChangeNotifierProvider<BottonNavigationBarProvider>(create: (_) => BottonNavigationBarProvider()),
+        ChangeNotifierProvider<ScanQrProvider>(create: (_) => ScanQrProvider()),    
       ],
       child: const QrMaster(),
     )

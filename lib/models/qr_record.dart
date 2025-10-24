@@ -1,8 +1,11 @@
 import 'package:floor/floor.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:qr_master/controllers/translation_controller.dart';
+import 'package:qr_master/models/content_type.dart';
 import 'package:qr_master/models/model_base.dart';
 
 @Entity(tableName: 'qr_records')
-class QrRecordEntity extends ModelBase {
+class QrRecord extends ModelBase {
   final String? content;               // valor crudo (ej. URL, texto, vCard)
   final DateTime? createdAt;
   final String? imagePath;            // si lo creaste y guardaste PNG/JPG
@@ -10,8 +13,10 @@ class QrRecordEntity extends ModelBase {
   final String? bgColorHex;           // color de fondo (hex)
   final String? logoPath;             // logo incrustado (opcional)
   final String? meta;   // wifi: ssid/auth; vcard: campos, etc.
-
-  QrRecordEntity({
+  final BarcodeFormat? symbology; 
+  final int? type;
+  
+  QrRecord({
     required super.serverId,
     super.id,
     super.needToSynchronize,
@@ -23,10 +28,16 @@ class QrRecordEntity extends ModelBase {
     this.bgColorHex,
     this.logoPath,
     this.meta,
+    this.symbology,
+    this.type,
   });
 
+  static const int typeScan = 1;
+  static const int typeCreate = 2;
+
+
   // CopyWith method for immutable updates
-  QrRecordEntity copyWith({
+  QrRecord copyWith({
     int? serverId,
     int? id,
     bool? needToSynchronize,
@@ -38,8 +49,10 @@ class QrRecordEntity extends ModelBase {
     String? bgColorHex,
     String? logoPath,
     String? meta,
+    BarcodeFormat? symbology,
+    int? type
   }) {
-    return QrRecordEntity(
+    return QrRecord(
       serverId: serverId ?? this.serverId,
       id: id ?? this.id,
       needToSynchronize: needToSynchronize ?? this.needToSynchronize,
@@ -51,13 +64,15 @@ class QrRecordEntity extends ModelBase {
       bgColorHex: bgColorHex ?? this.bgColorHex,
       logoPath: logoPath ?? this.logoPath,
       meta: meta ?? this.meta,
+      symbology : symbology ?? this.symbology,
+      type: type ?? this.type
     );
   }
 
   // Equality comparison
   @override
   bool operator ==(Object other) => identical(this, other) ||
-      other is QrRecordEntity &&
+      other is QrRecord &&
           runtimeType == other.runtimeType &&
           serverId == other.serverId &&
           id == other.id &&
@@ -69,6 +84,8 @@ class QrRecordEntity extends ModelBase {
           fgColorHex == other.fgColorHex &&
           bgColorHex == other.bgColorHex &&
           logoPath == other.logoPath &&
+          symbology == other.symbology &&
+          type == other.type &&
           meta == other.meta;
 
 
@@ -85,40 +102,15 @@ class QrRecordEntity extends ModelBase {
       fgColorHex.hashCode ^
       bgColorHex.hashCode ^
       logoPath.hashCode ^
+      symbology.hashCode ^
+      type.hashCode ^
       meta.hashCode;
 
   @override
   String toString() {
-    return 'QrRecordEntity{serverId: $serverId, id: $id, needToSynchronize: $needToSynchronize, uuid: $uuid, content: $content, createdAt: $createdAt, imagePath: $imagePath, fgColorHex: $fgColorHex, bgColorHex: $bgColorHex, logoPath: $logoPath, meta: $meta}';
+    return 'QrRecord{serverId: $serverId, id: $id, symbology:${symbology?.name} ,type:$type, needToSynchronize: $needToSynchronize, uuid: $uuid, content: $content, createdAt: $createdAt, imagePath: $imagePath, fgColorHex: $fgColorHex, bgColorHex: $bgColorHex, logoPath: $logoPath, meta: $meta}';
   }
 
-  /* Creates an QrRecordEntity object from JSON API response.
-  * @author  SGV - 20250812
-  * @version 1.0 - 20250812 - initial release
-  *
-  * @param   json - API response map
-  * @return  QrRecordEntity - Parsed QR record object
-  *
-  * Handles:
-  * - Type conversion (int/double to String)
-  * - Null safety for all fields
-  * - API field name mapping
-  * - DateTime parsing
-  */
-  factory QrRecordEntity.fromJson(Map<String, dynamic> json) {
-    return QrRecordEntity(
-      serverId: json['id'] as int,
-      content: json['content'] as String,
-      createdAt: DateTime.parse(json['created_at'] as String),
-      imagePath: json['image_path']?.toString(),
-      fgColorHex: json['fg_color_hex']?.toString(),
-      bgColorHex: json['bg_color_hex']?.toString(),
-      logoPath: json['logo_path']?.toString(),
-      // meta: json['meta'] != null 
-      //     ? Map<String, dynamic>.from(json['meta'] as Map)
-      //     : null,
-    );
-  }
 
   Map<String, dynamic> toJson() {
     return {
@@ -130,13 +122,12 @@ class QrRecordEntity extends ModelBase {
       'bg_color_hex': bgColorHex,
       'logo_path': logoPath,
       'meta': meta,
+      "symbology":symbology?.name,
+      "type":type
     };
   }
 
-  // Additional helper methods for QR functionality
-  bool get hasCustomDesign => fgColorHex != null || bgColorHex != null || logoPath != null;
-  
-  bool get isUrl => content!.startsWith(RegExp(r'https?://'));
+
   
   // String get displayType {
   //   if (content.startsWith('BEGIN:VCARD')) return 'Contacto';
@@ -147,23 +138,228 @@ class QrRecordEntity extends ModelBase {
   // }
 
   // Factory for creating new QR records (without serverId)
-  factory QrRecordEntity.createNew({
-    required String content,
-    String? imagePath,
-    String? fgColorHex,
-    String? bgColorHex,
-    String? logoPath,
-    String? meta,
-  }) {
-    return QrRecordEntity(
-      serverId: 0, // Temporary until synced
-      content: content,
-      createdAt: DateTime.now(),
-      imagePath: imagePath,
-      fgColorHex: fgColorHex,
-      bgColorHex: bgColorHex,
-      logoPath: logoPath,
-      meta: meta,
+  factory QrRecord.empyt() {
+    return QrRecord(
+      serverId: 0,
     );
   }
+
+
+  getAllTypeOfQR(){
+    List<Map<String,dynamic>> allTypeOfQR = [
+      {
+        "name":translate("web site"),
+        "url": "",
+        "icon":"",
+      },
+      {
+        "name":translate("contact"),
+        "url": "",
+        "icon":"",
+      },
+      {
+        "name":translate("text"),
+        "url": "",
+        "icon":"",
+      },
+      {
+        "name":translate("email address"),
+        "url": "",
+        "icon":"",
+      },
+      {
+        "name":translate("wifi"),
+        "url": "",
+        "icon":"",
+      },
+      {
+        "name":translate("location"),
+        "url": "",
+        "icon":"",
+      },
+      {
+        "name":translate("event"),
+        "url": "",
+        "icon":"",
+      },
+      {
+        "name":translate("SMS"),
+        "url": "",
+        "icon":"",
+      },
+    ];
+    return allTypeOfQR;
+  }
+
+  geAllType2Dcode(){
+    List<Map<String,dynamic>> allTypeOfQR2D = [
+      {
+        "name":translate("QR code"),
+        "url": "",
+        "barcode":BarcodeFormat.qrCode,
+        "descriptions":translate("text"),
+        "icon":"",
+      },
+      {
+        "name":translate("data matrix"),
+        "url": "",
+        "barcode":BarcodeFormat.dataMatrix,
+        "descriptions":translate("text without special characters"),
+        "icon":"",
+      },
+      {
+        "name":translate("PDF 417"),
+        "url": "",
+        "barcode":BarcodeFormat.pdf417,
+        "descriptions":translate(""),
+        "icon":"",
+      },
+      {
+        "name":translate("AZtec"),
+        "url": "",
+        "barcode":BarcodeFormat.aztec,
+        "descriptions":translate("text without special characters"),
+        "icon":"",
+      },
+      {
+        "name":translate("EAN 13"),
+        "url": "",
+        "barcode":BarcodeFormat.ean13,
+        "descriptions":translate("12 digits + 1 checksum digit"),
+        "icon":"",
+      },
+      {
+        "name":translate("EAN 8"),
+        "url": "",
+        "barcode":BarcodeFormat.ean8,
+        "descriptions":translate("8 digit"),
+        "icon":"",
+      },
+      {
+        "name":translate("UPC E"),
+        "url": "",
+        "barcode":BarcodeFormat.upcE,
+        "descriptions":translate("7 digits + checksum digits"),
+        "icon":"",
+      },
+      {
+        "name":translate("UPC A"),
+        "url": "",
+        "barcode":BarcodeFormat.upcA,
+        "descriptions":translate("11 digits + checksum digits"),
+        "icon":"",
+      },
+      {
+        "name":translate("code 128"),
+        "url": "",
+        "barcode":BarcodeFormat.code128,
+        "descriptions":translate("11 digits + checksum digits"),
+        "icon":"",
+      },
+      {
+        "name":translate("code 93"),
+        "url": "",
+        "barcode":BarcodeFormat.code93,
+        "descriptions":translate("uppercase text without special characters"),
+        "icon":"",
+      },
+      {
+        "name":translate("code 39"),
+        "url": "",
+        "barcode":BarcodeFormat.code39,
+        "descriptions":translate("uppercase text without special characters"),
+        "icon":"",
+      },
+      {
+        "name":translate("codabar"),
+        "url": "",
+        "barcode":BarcodeFormat.codebar,
+        "descriptions":translate("digits"),
+        "icon":"",
+      },
+       {
+        "name":translate("ITF"),
+        "url": "",
+        "barcode":BarcodeFormat.itf,
+        "descriptions":translate("even-digit numbers"),
+        "icon":"",
+      },
+    ];
+    return allTypeOfQR2D;
+  }
+
+
+
+  String mapFormatTo2DName(BarcodeFormat? f) {
+    switch (f) {
+      case BarcodeFormat.qrCode:
+        return translate("QR code");
+      case BarcodeFormat.dataMatrix:
+        return translate("data matrix");
+      case BarcodeFormat.pdf417:
+        return translate("PDF 417");
+      case BarcodeFormat.aztec:
+        return translate("AZtec");
+      case BarcodeFormat.ean13:
+        return translate("EAN 13");
+      case BarcodeFormat.ean8:
+        return translate("EAN 8");
+      case BarcodeFormat.upcE:
+        return translate("UPC E");
+      case BarcodeFormat.upcA:
+        return translate("UPC A");
+      case BarcodeFormat.code128:
+        return translate("code 128");
+      case BarcodeFormat.code93:
+        return translate("code 93");
+      case BarcodeFormat.code39:
+        return translate("code 39");
+      case BarcodeFormat.codabar:
+        return translate("codabar");
+      case BarcodeFormat.itf:
+        return translate("ITF");
+      default:
+        return translate("QR code"); // fallback razonable
+    }
+  }
+
+
+
+  // Detecta el tipo de contenido a partir del texto crudo.
+  ContentType detectContentType(String raw) {
+    final s = raw.trim();
+    // WiFi (formato estándar)
+    if (s.startsWith('WIFI:')) return ContentType.wifi;
+    // Evento (vCalendar / vEvent)
+    if (s.contains('BEGIN:VEVENT') || s.contains('BEGIN:VCALENDAR')) {
+      return ContentType.event;
+    }
+    // Contacto (vCard / MeCard)
+    if (s.startsWith('BEGIN:VCARD') || s.startsWith('MECARD:')) {
+      return ContentType.contact;
+    }
+    // SMS
+    final lower = s.toLowerCase();
+    if (lower.startsWith('sms:') || lower.startsWith('smsto:')) {
+      return ContentType.sms;
+    }
+    // Ubicación (geo:)
+    if (lower.startsWith('geo:')) return ContentType.location;
+    // Email
+    if (lower.startsWith('mailto:')) return ContentType.email;
+    final emailRegex = RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$');
+    if (emailRegex.hasMatch(s)) return ContentType.email;
+    // Website / URL
+    final urlLike = RegExp(
+      r'^(https?:\/\/|www\.)[^\s]+$',
+      caseSensitive: false,
+    );
+    if (urlLike.hasMatch(s)) return ContentType.website;
+    // Evitar confundir códigos puramente numéricos (EAN/UPC) con texto especial
+    final onlyDigits = RegExp(r'^\d+$');
+    if (onlyDigits.hasMatch(s)) return ContentType.text;
+    // Por defecto, texto libre
+    return ContentType.text;
+  }
+
 }

@@ -3,12 +3,12 @@ import 'package:qr_master/dao/repository_base_dao.dart';
 import 'package:qr_master/models/qr_record.dart';
 
 @dao
-abstract class QrRecordEntityDao extends RepositoryBaseDao<QrRecordEntity> {
+abstract class QrRecordEntityDao extends RepositoryBaseDao<QrRecord> {
   @Query('SELECT * FROM qr_records')
-  Future<List<QrRecordEntity>> fetchAll();
+  Future<List<QrRecord>> fetchAll();
 
   @Query('SELECT * FROM qr_records WHERE id = :id')
-  Future<QrRecordEntity?> fetchById(int id);
+  Future<QrRecord?> fetchById(int id);
 
   @Query('DELETE FROM qr_records')
   Future<void> deleteAll();

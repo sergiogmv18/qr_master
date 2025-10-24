@@ -1,178 +1,276 @@
-
 localTranslations(){
   return [
-    { 
+    {
       "en":"QR Master: Scanner & Creator",
       "pt":"",
       "es":"",
+      "de":"QR Master: Scanner & Ersteller",
+      "fr":"QR Master : Scanner et Créateur",
+      "it":"QR Master: Scanner e Creatore",
     },
-    { 
+    {
       "en":"home",
       "pt":"",
       "es":"inicio",
+      "de":"Startseite",
+      "fr":"accueil",
+      "it":"inizio",
     },
-    { 
+    {
       "en":"history",
       "pt":"",
       "es":"",
+      "de":"Verlauf",
+      "fr":"historique",
+      "it":"storico",
     },
-    { 
+    {
       "en":"create",
       "pt":"",
       "es":"crear",
+      "de":"Erstellen",
+      "fr":"créer",
+      "it":"crea",
     },
-    { 
+    {
       "en":"suscriptions",
       "pt":"",
       "es":"",
+      "de":"Abonnements",
+      "fr":"abonnements",
+      "it":"abbonamenti",
     },
-    { 
-      "en":"unlimited scans • 5 free creations.",
+    {
+      "en":"unlimited scans �?� 5 free creations.",
       "pt":"",
-      "es":"lectura ilimitada • 5 creaciones sin costo.",
+      "es":"lectura ilimitada �?� 5 creaciones sin costo.",
+      "de":"Unbegrenzte Scans – 5 kostenlose Erstellungen.",
+      "fr":"scans illimités – 5 créations gratuites.",
+      "it":"scansioni illimitate – 5 creazioni gratuite.",
     },
-    { 
+    {
       "en":"scan QR",
       "pt":"",
       "es":"escanear QR",
+      "de":"QR-Code scannen",
+      "fr":"scanner un code QR",
+      "it":"scansiona codice QR",
     },
-    { 
+    {
       "en":"faster: Generate and save your QR codes without limits with Pro.",
       "pt":"",
-      "es":"más rápido: Genera y guarda tus QR sin límites con Pro.",
+      "es":"mǭs rǭpido: Genera y guarda tus QR sin lmites con Pro.",
+      "de":"schneller: Erstelle und speichere deine QR-Codes ohne Limits mit Pro.",
+      "fr":"plus rapide : générez et enregistrez vos codes QR sans limite avec Pro.",
+      "it":"più veloce: genera e salva i tuoi codici QR senza limiti con Pro.",
     },
-    { 
-      "en":"",
+    {
+      "en":"code detected",
       "pt":"",
-      "es":"",
-    },
-
-    { 
-      "en":"",
-      "pt":"",
-      "es":"",
-    },
-    { 
-      "en":"",
-      "pt":"",
-      "es":"",
-    },
-    { 
-      "en":"",
-      "pt":"",
-      "es":"",
-    },
-    { 
-      "en":"",
-      "pt":"",
-      "es":"",
+      "es":"Cdigo detectado",
+      "de":"Code erkannt",
+      "fr":"code détecté",
+      "it":"codice rilevato",
     },
 
-    { 
-      "en":"",
+    {
+      "en":"continue scanning",
       "pt":"",
-      "es":"",
+      "es":"Continuar escaneando",
+      "de":"Weiter scannen",
+      "fr":"continuer à scanner",
+      "it":"continua a scansionare",
     },
-    { 
-      "en":"",
+    {
+      "en":"QR code value copied successfully",
       "pt":"",
-      "es":"",
+      "es":"valor del qr code copiado con suceso",
+      "de":"QR-Code-Wert erfolgreich kopiert",
+      "fr":"valeur du code QR copiée avec succès",
+      "it":"valore del codice QR copiato con successo",
     },
-    { 
-      "en":"",
+    {
+      "en":"return to the beginning",
       "pt":"",
-      "es":"",
+      "es":"volver al inicio",
+      "de":"Zurück zum Anfang",
+      "fr":"retour au début",
+      "it":"torna all'inizio",
     },
-
-    { 
-      "en":"",
+    {
+      "en":"text",
       "pt":"",
-      "es":"",
-    },
-    { 
-      "en":"",
-      "pt":"",
-      "es":"",
-    },
-    { 
-      "en":"",
-      "pt":"",
-      "es":"",
-    },
-
-    { 
-      "en":"",
-      "pt":"",
-      "es":"",
+      "es":"texto",
+      "de":"Text",
+      "fr":"texte",
+      "it":"testo",
     },
 
-    { 
-      "en":"",
+    {
+      "en":"text without special characters",
+      "pt":"",
+      "es":"texto sin caracter especiales",
+      "de":"Text ohne Sonderzeichen",
+      "fr":"texte sans caractères spéciaux",
+      "it":"testo senza caratteri speciali",
+    },
+    {
+      "en":"12 digits + 1 checksum digit",
+      "pt":"", 
+      "es":"12 digitos + 1 digito de suma de comprobacin",
+      "de":"12 Ziffern + 1 Prüfziffer",
+      "fr":"12 chiffres + 1 chiffre de contrôle",
+      "it":"12 cifre + 1 cifra di controllo",
+    },
+    {
+      "en":"type",
       "pt":"",
       "es":"",
+      "de":"",
+      "fr":"",
+      "it":"",
     },
 
-    { 
+    {
+      "en":"save",
+      "pt":"",
+      "es":"",
+      "de":"",
+      "fr":"",
+      "it":"",
+    },
+    {
       "en":"",
       "pt":"",
       "es":"",
+      "de":"",
+      "fr":"",
+      "it":"",
+    },
+    {
+      "en":"",
+      "pt":"",
+      "es":"",
+      "de":"",
+      "fr":"",
+      "it":"",
+    },
+
+    {
+      "en":"",
+      "pt":"",
+      "es":"",
+      "de":"",
+      "fr":"",
+      "it":"",
+    },
+
+    {
+      "en":"",
+      "pt":"",
+      "es":"",
+      "de":"",
+      "fr":"",
+      "it":"",
+    },
+
+    {
+      "en":"",
+      "pt":"",
+      "es":"",
+      "de":"",
+      "fr":"",
+      "it":"",
     },
 
 
-    { 
+    {
       "en":"",
       "pt":"",
       "es":"",
+      "de":"",
+      "fr":"",
+      "it":"",
     },
-    { 
+    {
       "en":"",
       "pt":"",
       "es":"",
+      "de":"",
+      "fr":"",
+      "it":"",
     },
-    { 
+    {
       "en":"",
       "pt":"",
       "es":"",
+      "de":"",
+      "fr":"",
+      "it":"",
     },
-    { 
+    {
       "en":"",
       "pt":"",
       "es":"",
+      "de":"",
+      "fr":"",
+      "it":"",
     },
-    { 
+    {
       "en":"",
       "pt":"",
       "es":"",
+      "de":"",
+      "fr":"",
+      "it":"",
     },
-    { 
+    {
       "en":"",
       "pt":"",
       "es":"",
+      "de":"",
+      "fr":"",
+      "it":"",
     },
-    { 
+    {
       "en":"",
       "pt":"",
       "es":"",
+      "de":"",
+      "fr":"",
+      "it":"",
     },
-    { 
+    {
       "en":"",
       "pt":"",
       "es":"",
+      "de":"",
+      "fr":"",
+      "it":"",
     },
-    { 
+    {
       "en":"",
       "pt":"",
       "es":"",
+      "de":"",
+      "fr":"",
+      "it":"",
     },
-    { 
+    {
       "en":"",
       "pt":"",
       "es":"",
+      "de":"",
+      "fr":"",
+      "it":"",
     },
-    { 
+    {
       "en":"",
       "pt":"",
       "es":"",
+      "de":"",
+      "fr":"",
+      "it":"",
     },
   ];
 
