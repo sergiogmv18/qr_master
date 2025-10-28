@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:qr_master/screen/home/home_screen.dart';
-import 'package:qr_master/screen/qr/scan_qr_screen.dart';
+import 'package:qr_master/screen/scan/scan_qr_screen.dart';
 import 'package:qr_master/screen/splash_screen.dart';
 
 class RouteAppName {

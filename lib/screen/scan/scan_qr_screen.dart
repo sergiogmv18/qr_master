@@ -5,7 +5,6 @@ import 'package:qr_master/components/app_bar.dart';
 import 'package:qr_master/components/botton_navigator_bar.dart';
 import 'package:qr_master/components/name_app_bar.dart';
 import 'package:qr_master/components/pop_scope_custom.dart';
-import 'package:qr_master/components/snack_bar_custom.dart';
 import 'package:qr_master/config/route_app.dart';
 import 'package:qr_master/config/style.dart';
 import 'package:qr_master/controllers/translation_controller.dart';
@@ -13,17 +12,46 @@ import 'package:qr_master/provider/provider_scanqr.dart';
 import 'package:qr_master/screen/ads_mod/banner_ad.dart';
 import 'package:qr_master/widgets/scan_frame_painter.dart';
 
-class ScanQrScreen extends StatelessWidget {
+class ScanQrScreen extends StatefulWidget {
   const ScanQrScreen({super.key});
 
   @override
+  State<ScanQrScreen> createState() => _ScanQrScreenState();
+}
+
+class _ScanQrScreenState extends State<ScanQrScreen>  with WidgetsBindingObserver {
+   late ScanQrProvider provider;
+
+    @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    provider = ScanQrProvider();
+    // Iniciar scanner al inicializar la pantalla
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      provider.startScanner();
+    });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    provider.stopScanner();
+    // Importante: dispose del provider
+    provider.dispose();
+    super.dispose();
+  }
+  
+  @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => ScanQrProvider(),
-      child: const _ScanQrScreenContent(),
-    );
+    return ChangeNotifierProvider.value(
+    value: provider,
+    child: const _ScanQrScreenContent(),
+  );
   }
 }
+
+
 
 class _ScanQrScreenContent extends StatelessWidget {
   const _ScanQrScreenContent();

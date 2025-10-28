@@ -4,7 +4,7 @@ import 'package:qr_master/config/constanst.dart';
 import 'package:qr_master/config/style.dart';
 import 'package:qr_master/screen/ads_mod/interstitial_ad.dart';
 import 'package:qr_master/services/function_class.dart';
-import 'package:qr_master/widgets/result_sheet.dart';
+import 'package:qr_master/screen/scan/result_sheet.dart';
 
 class ScanQrProvider with ChangeNotifier {
   final MobileScannerController controllerQr = MobileScannerController(
@@ -92,18 +92,7 @@ class ScanQrProvider with ChangeNotifier {
     await stopScanner();
 
     if (!context.mounted) return;
-    
-    await showModalBottomSheet(
-      context: context,
-      isScrollControlled:true,
-      enableDrag: false,
-      isDismissible: false,
-      backgroundColor: CustomColors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(Constants.borderRadius)),
-      ),
-      builder: (_) => ResultSheet(value: raw, barcode:barcode, onDismiss: startScanner),
-    );
+    Navigator.push(context, PageRouteBuilder(pageBuilder: (context, animation, secondaryAnimation) => ResultScanScreen(value: raw, barcode:barcode, onDismiss: startScanner)));
   }
 
   @override

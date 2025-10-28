@@ -5,7 +5,7 @@ import 'package:qr_master/models/qr_record.dart';
 @dao
 abstract class QrRecordEntityDao extends RepositoryBaseDao<QrRecord> {
   @Query('SELECT * FROM qr_records')
-  Future<List<QrRecord>> fetchAll();
+  Future<List<QrRecord?>> fetchAll();
 
   @Query('SELECT * FROM qr_records WHERE id = :id')
   Future<QrRecord?> fetchById(int id);

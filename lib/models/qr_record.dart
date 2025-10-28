@@ -1,8 +1,10 @@
 import 'package:floor/floor.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:qr_master/controllers/translation_controller.dart';
+import 'package:qr_master/database/qr_master_database.dart';
 import 'package:qr_master/models/content_type.dart';
 import 'package:qr_master/models/model_base.dart';
+import 'package:qr_master/services/service_locator.dart';
 
 @Entity(tableName: 'qr_records')
 class QrRecord extends ModelBase {
@@ -125,6 +127,12 @@ class QrRecord extends ModelBase {
       "symbology":symbology?.name,
       "type":type
     };
+  }
+
+
+  static Future<List<QrRecord?>>getAll()async{
+    List<QrRecord?> allQrRecords = await serviceLocator<QrMasterDatabase>().qrRecordEntityDao.fetchAll();
+    return allQrRecords;
   }
 
 
@@ -347,6 +355,7 @@ class QrRecord extends ModelBase {
     if (lower.startsWith('geo:')) return ContentType.location;
     // Email
     if (lower.startsWith('mailto:')) return ContentType.email;
+    if (lower.startsWith('matmsg:')) return ContentType.email;
     final emailRegex = RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$');
     if (emailRegex.hasMatch(s)) return ContentType.email;
     // Website / URL
