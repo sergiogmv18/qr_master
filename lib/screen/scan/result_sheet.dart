@@ -6,7 +6,6 @@ import 'package:qr_master/components/botton_navigator_bar.dart';
 import 'package:qr_master/components/name_app_bar.dart';
 import 'package:qr_master/components/plan_current_suscription.dart';
 import 'package:qr_master/components/pop_scope_custom.dart';
-import 'package:qr_master/config/route_app.dart';
 import 'package:qr_master/config/style.dart';
 import 'package:qr_master/controllers/translation_controller.dart';
 import 'package:qr_master/provider/provider_scanqr.dart';

@@ -30,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
             backgroundColor: CustomColors.primaryDark,
             appBar: appBarCustom(
               context,
-              title: NameScreens(name: translate("home"))
+              title: NameScreens(name:showName(index:provider.currentIndexPage)),
             ),
             floatingActionButtonAnimator:FloatingActionButtonAnimator.scaling ,
             bottomNavigationBar: BottonNavigatorBarCustom(),
@@ -42,8 +42,22 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
 
-  showBody({required int index}){
+  showName({required int index}){
+    switch(index){
+      case 0: 
+      return translate("home");
+      case 1: 
+      return translate("create");
+      case 2: 
+      return translate("history");
+      case 3: 
+      return translate("config");
+
+    }
     
+  }
+
+  showBody({required int index}){
     switch(index){
       case 0: 
       return DashboardScreen();

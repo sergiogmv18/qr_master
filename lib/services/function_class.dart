@@ -8,6 +8,9 @@ import 'package:qr_master/controllers/translation_controller.dart';
 import 'package:qr_master/widgets/content_type_email.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'package:intl/intl.dart' as intl;
+
+
 
 class FunctionsClass {
 
@@ -549,5 +552,20 @@ class FunctionsClass {
     );
     await launchUrl(outlookWeb, mode: LaunchMode.externalApplication);
   }
+
+
+
+  String formatDateAuto(BuildContext context, DateTime date, {bool abbreviated = true}) {
+  final locale = Localizations.localeOf(context).toString(); // p.ej. "es_ES"
+  // Abreviado:  "23, may de 2025" (es) / "May 23, 2025" (en) / …
+  // Completo:   "23 de mayo de 2025" (es) / "May 23, 2025" (en) / …
+  if (abbreviated) {
+    // yMMMd produce una forma corta localizada (incluye comas si el idioma las usa)
+    return intl.DateFormat.yMMMd(locale).format(date);
+  } else {
+    // yMMMMd produce la forma larga localizada e incluye “de” en español automáticamente
+    return intl.DateFormat.yMMMMd(locale).format(date);
+  }
+}
 }
     

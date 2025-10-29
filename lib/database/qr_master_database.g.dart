@@ -205,7 +205,7 @@ class _$QrRecordEntityDao extends QrRecordEntityDao {
   final DeletionAdapter<QrRecord> _qrRecordDeletionAdapter;
 
   @override
-  Future<List<QrRecord>> fetchAll() async {
+  Future<List<QrRecord?>> fetchAll() async {
     return _queryAdapter.queryList('SELECT * FROM qr_records',
         mapper: (Map<String, Object?> row) => QrRecord(
             serverId: row['serverId'] as int,
@@ -243,6 +243,27 @@ class _$QrRecordEntityDao extends QrRecordEntityDao {
                 _barcodeFormatConverter.decode(row['symbology'] as String?),
             type: row['type'] as int?),
         arguments: [id]);
+  }
+
+  @override
+  Future<List<QrRecord>> fetchAllType(int type) async {
+    return _queryAdapter.queryList('SELECT * FROM qr_records WHERE type = ?1',
+        mapper: (Map<String, Object?> row) => QrRecord(
+            serverId: row['serverId'] as int,
+            id: row['id'] as int?,
+            needToSynchronize: (row['needToSynchronize'] as int) != 0,
+            uuid: row['uuid'] as String?,
+            content: row['content'] as String?,
+            createdAt: _dateTimeConverter.decode(row['createdAt'] as int?),
+            imagePath: row['imagePath'] as String?,
+            fgColorHex: row['fgColorHex'] as String?,
+            bgColorHex: row['bgColorHex'] as String?,
+            logoPath: row['logoPath'] as String?,
+            meta: row['meta'] as String?,
+            symbology:
+                _barcodeFormatConverter.decode(row['symbology'] as String?),
+            type: row['type'] as int?),
+        arguments: [type]);
   }
 
   @override

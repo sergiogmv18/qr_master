@@ -1,4 +1,6 @@
 import 'package:floor/floor.dart';
+import 'package:flutter/material.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:qr_master/controllers/translation_controller.dart';
 import 'package:qr_master/database/qr_master_database.dart';
@@ -114,6 +116,53 @@ class QrRecord extends ModelBase {
   }
 
 
+getIconToType(){
+  if(content != null){
+        ContentType contentType = detectContentType(content!);
+        switch(contentType){
+          case ContentType.website: 
+            return LineAwesomeIcons.internet_explorer;
+          case ContentType.contact: 
+            return LineAwesomeIcons.user;
+          case ContentType.text: 
+          case ContentType.unknown: 
+            return LineAwesomeIcons.qrcode_solid;
+          case ContentType.email: 
+            return LineAwesomeIcons.envelope;
+          case ContentType.wifi: 
+            return LineAwesomeIcons.wifi_solid;
+          case ContentType.location: 
+            return LineAwesomeIcons.search_location_solid;
+          case ContentType.event: 
+            return LineAwesomeIcons.calendar;
+          case ContentType.sms: 
+            return LineAwesomeIcons.sms_solid;
+          default: 
+        }
+      }
+    switch (symbology) {
+      case BarcodeFormat.ean13:
+      case BarcodeFormat.ean8:
+      case BarcodeFormat.code128:
+      case BarcodeFormat.code93:
+      case BarcodeFormat.code39:
+      case BarcodeFormat.codabar:
+      case BarcodeFormat.upcA:
+      case BarcodeFormat.upcE:
+        return LineAwesomeIcons.barcode_solid;
+      case BarcodeFormat.pdf417:
+        return Icons.qr_code_2_rounded;
+
+    case BarcodeFormat.dataMatrix:
+    case BarcodeFormat.aztec:
+    case BarcodeFormat.itf:
+      break;
+    default:
+     return LineAwesomeIcons.barcode_solid; 
+    }
+  }
+               
+
   Map<String, dynamic> toJson() {
     return {
       'id': serverId,
@@ -130,20 +179,16 @@ class QrRecord extends ModelBase {
   }
 
 
-  static Future<List<QrRecord?>>getAll()async{
-    List<QrRecord?> allQrRecords = await serviceLocator<QrMasterDatabase>().qrRecordEntityDao.fetchAll();
+  static Future<List<QrRecord?>>getAll({int? type})async{
+    List<QrRecord?> allQrRecords = [];
+    if(type != null){
+      allQrRecords = await serviceLocator<QrMasterDatabase>().qrRecordEntityDao.fetchAllType(type);
+    }else{
+      allQrRecords = await serviceLocator<QrMasterDatabase>().qrRecordEntityDao.fetchAll();
+    }
     return allQrRecords;
   }
 
-
-  
-  // String get displayType {
-  //   if (content.startsWith('BEGIN:VCARD')) return 'Contacto';
-  //   if (content.startsWith('WIFI:')) return 'WiFi';
-  //   if (content.startsWith('mailto:')) return 'Email';
-  //   if (isUrl) return 'URL';
-  //   return 'Texto';
-  // }
 
   // Factory for creating new QR records (without serverId)
   factory QrRecord.empyt() {

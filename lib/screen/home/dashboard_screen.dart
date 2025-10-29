@@ -4,7 +4,7 @@ import 'package:qr_master/config/route_app.dart';
 import 'package:qr_master/config/style.dart';
 import 'package:qr_master/controllers/translation_controller.dart';
 import 'package:qr_master/screen/ads_mod/banner_ad.dart';
-import 'package:qr_master/screen/ads_mod/interstitial_ad.dart';
+import 'package:qr_master/screen/ads_mod/native_ad.dart';
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
@@ -13,29 +13,29 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-     final _manager = AndroidInterstitialManager();
+    // final _manager = AndroidInterstitialManager();
     @override
   void initState() {
     super.initState();
-      _manager.preload();
+      ///_manager.preload();
      
   }
 
 
   @override
   void dispose() {
-    _manager.dispose();
+    //_manager.dispose();
     super.dispose();
   }
 
-  Future<void> _onAction() async {
-    final showed = _manager.showIfReady();
-    if (!showed && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Interstitial aún no está listo.')),
-      );
-    }
-  }
+  // Future<void> _onAction() async {
+  //   final showed = _manager.showIfReady();
+  //   if (!showed && mounted) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(content: Text('Interstitial aún no está listo.')),
+  //     );
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -54,8 +54,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   // SCAN QR
           PlanBadgeCard(
             onTap: () async{
-              await _onAction();
-              if(!context.mounted) return;
+             // await _onAction();
+              //if(!context.mounted) return;
               Navigator.of(context).pushNamedAndRemoveUntil(RouteAppName.scanScreen,(route) => false);
             },
             borderGradient: const LinearGradient(
@@ -97,12 +97,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ],
             ),
           ),
-          PlanBadgeCard(
-            title: translate('update to Pro'),
-            subtitle: translate('faster: Generate and save your QR codes without limits with Pro.'),
-          ),
-          AdaptiveBanner(),
-
+          const SizedBox(height: 20),
+          NativeAdCard(height: 300),
         ],
       )  
     );

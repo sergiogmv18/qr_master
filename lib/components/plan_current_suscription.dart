@@ -22,7 +22,7 @@ class PlanBadgeCard extends StatelessWidget {
       end: Alignment.bottomRight,
       colors: [CustomColors.primary,CustomColors.secundary], // aqua → violeta
     ),
-    this.radius = 18,
+    this.radius = 5,
     this.padding = const EdgeInsets.all(16),
   });
 

@@ -10,6 +10,9 @@ abstract class QrRecordEntityDao extends RepositoryBaseDao<QrRecord> {
   @Query('SELECT * FROM qr_records WHERE id = :id')
   Future<QrRecord?> fetchById(int id);
 
+  @Query('SELECT * FROM qr_records WHERE type = :type')
+  Future<List<QrRecord>> fetchAllType(int type);
+
   @Query('DELETE FROM qr_records')
   Future<void> deleteAll();
 

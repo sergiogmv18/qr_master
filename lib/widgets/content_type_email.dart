@@ -12,10 +12,11 @@ import 'package:qr_master/services/function_class.dart';
 
 class ContentTypeEmail extends StatelessWidget {
   final QrRecord qrRecord;
-  final Barcode barcode;
+  final Barcode? barcode;
   final String raw;
   final String formatted;
-  const ContentTypeEmail({super.key, required this.qrRecord, required this.raw, required this.barcode, required this.formatted});
+  final bool showData;
+  const ContentTypeEmail({super.key, required this.qrRecord, required this.raw, this.showData = false, this.barcode, required this.formatted});
 
   @override
   Widget build(BuildContext context) {
@@ -145,7 +146,7 @@ class ContentTypeEmail extends StatelessWidget {
                           style: Theme.of(context).textTheme.bodySmall!.copyWith(color: CustomColors.white, fontWeight: FontWeight.bold),
                         ),
                         TextSpan(
-                          text:": ${barcode.format.name} - ${translate("email address")}",
+                          text:": ${barcode?.format.name} - ${translate("email address")}",
                         style: Theme.of(context).textTheme.bodySmall!.copyWith(color: CustomColors.white),
                         ),
                         TextSpan(
@@ -180,31 +181,34 @@ class ContentTypeEmail extends StatelessWidget {
                         )
                       ),
 // SAVE
-                      TextButton.icon(
-                        onPressed: ()async{
-                          showCircularLoadingDialog(context);
-                          QrRecord newQrRecord = qrRecord.copyWith(
-                            content: raw,
-                            type: QrRecord.typeScan,
-                            createdAt: DateTime.now(),
-                            symbology: barcode.format,
-                          );
-                          await QrRecordController().saveQrRecord(qrRecord:newQrRecord);
-                          if(!context.mounted) return;
-                          Navigator.of(context).pop();
-                          snackBarCustom(context, subtitle: translate("saved successfully"));
-                        }, 
-                        label: Text(
-                          translate('save'), 
-                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: CustomColors.white),
+                      if(!showData)...{
+                        TextButton.icon(
+                          onPressed: ()async{
+                            showCircularLoadingDialog(context);
+                            QrRecord newQrRecord = qrRecord.copyWith(
+                              content: raw,
+                              type: QrRecord.typeScan,
+                              createdAt: DateTime.now(),
+                              symbology: barcode?.format,
+                            );
+                            await QrRecordController().saveQrRecord(qrRecord:newQrRecord);
+                            if(!context.mounted) return;
+                            Navigator.of(context).pop();
+                            snackBarCustom(context, subtitle: translate("saved successfully"));
+                          }, 
+                          label: Text(
+                            translate('save'), 
+                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: CustomColors.white),
+                          ),
+                          iconAlignment:IconAlignment.start,
+                          icon:Icon(
+                            Icons.save,
+                            color: CustomColors.warning,
+                            size: Theme.of(context).textTheme.bodyLarge!.fontSize,
+                          )
                         ),
-                        iconAlignment:IconAlignment.start,
-                        icon:Icon(
-                          Icons.save,
-                          color: CustomColors.warning,
-                          size: Theme.of(context).textTheme.bodyLarge!.fontSize,
-                        )
-                      ),
+                      }
+                     
                     ]
                   ),
                 ),
