@@ -1,4 +1,4 @@
-package com.example.qr_master
+package com.sgv.qr_master
 
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine

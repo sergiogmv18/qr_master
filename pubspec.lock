@@ -789,6 +789,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
+  plugin_wifi_connect:
+    dependency: "direct main"
+    description:
+      name: plugin_wifi_connect
+      sha256: "19d318dfe834e9904bae8328b4ff7b104f7de697dec6709a10f1e9c743e7cbc1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
   pool:
     dependency: transitive
     description:
@@ -1258,6 +1266,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.23.1"
+  wifi_iot:
+    dependency: "direct main"
+    description:
+      name: wifi_iot
+      sha256: "0861aed0c0afd6031b4337811d31cdd181c594a8a2c73e94826ea21d2cb4707b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.19+2"
   xdg_directories:
     dependency: transitive
     description:

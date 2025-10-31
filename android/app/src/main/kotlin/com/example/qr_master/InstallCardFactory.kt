@@ -1,4 +1,4 @@
-package com.example.qr_master
+package com.sgv.qr_master
 
 import android.content.Context
 import android.view.LayoutInflater

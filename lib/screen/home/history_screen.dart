@@ -80,43 +80,43 @@ class _HistoryScreenState extends State<HistoryScreen> with TickerProviderStateM
               ),
             ),
             FutureBuilder(
-                  future: QrRecord.getAll(type: provider.indexToTab == 0 ? QrRecord.typeCreate : QrRecord.typeScan),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return  Center(
-                        child: circularProgressIndicator(context),
-                      );
-                    }
-                    var response = snapshot.data;
-                    if ((response == null) || snapshot.hasError) {
-                      return Container();
-                    }
-                    if(response.isEmpty){
-                      return showMessageListEmpty(qrRecord:provider.indexToTab == 0 ? QrRecord.typeCreate : QrRecord.typeScan);
-                    }else{
-                      return  Expanded(
-                        child:SingleChildScrollView(
-                          padding: EdgeInsets.only(left: 10, right: 10, bottom: 30, top: 30),
-                          child: Column(
-                            spacing: 10,
-                            children: [
-                              for(int current = 0; current < response.length; current++)...[
-                                if(response[current] != null)...[
-                                  ShowDataQrRecord(qrRecord: response[current]!),
-                                  if(current > 0 && current % 2 == 0)...[
-                                      AdaptiveBanner(),
-                                  ]
-                                ],
-                              ],
+              future: QrRecord.getAll(type: provider.indexToTab == 0 ? QrRecord.typeCreate : QrRecord.typeScan),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return  Center(
+                    child: circularProgressIndicator(context),
+                  );
+                }
+                var response = snapshot.data;
+                if ((response == null) || snapshot.hasError) {
+                  return Container();
+                }
+                if(response.isEmpty){
+                  return showMessageListEmpty(qrRecord:provider.indexToTab == 0 ? QrRecord.typeCreate : QrRecord.typeScan);
+                }else{
+                  return  Expanded(
+                    child:SingleChildScrollView(
+                      padding: EdgeInsets.only(left: 10, right: 10, bottom: 30, top: 30),
+                      child: Column(
+                        spacing: 10,
+                        children: [
+                          for(int current = 0; current < response.length; current++)...[
+                            if(response[current] != null)...[
+                              ShowDataQrRecord(qrRecord: response[current]!),
+                              if(current > 0 && current % 2 == 0)...[
+                                AdaptiveBanner(),
+                              ]
                             ],
-                          )
-                        )
-                      );
-                    }
-                    
-                  }
-                )
-              ]
+                          ],
+                        ],
+                      )
+                    )
+                  );
+                }
+                
+              }
+            )
+          ]
           
         
         );
@@ -139,32 +139,35 @@ class _HistoryScreenState extends State<HistoryScreen> with TickerProviderStateM
        Navigator.of(context).pushNamedAndRemoveUntil(RouteAppName.scanScreen,(route) => false);
      };
     }
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        SizedBox(height: 40),
-        Text(
-          title, 
-          style:Theme.of(context).textTheme.titleMedium!.copyWith(color: CustomColors.white),
-          textAlign: TextAlign.center,
-        ),
-        SizedBox(height: 30),
-        PlanBadgeCard(
-          borderGradient: const LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [CustomColors.primary, CustomColors.primary], // aqua → violeta
-          ),
-          onTap: onTap,
-          child:Text(
-            titleButton, 
+    return Container(
+      padding: EdgeInsets.only(left: 10, right: 10, bottom: 30, top: 30),
+      child:Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          SizedBox(height: 40),
+          Text(
+            title, 
             style:Theme.of(context).textTheme.titleMedium!.copyWith(color: CustomColors.white),
             textAlign: TextAlign.center,
-          )
-        ),
-      ],
+          ),
+          SizedBox(height: 30),
+          PlanBadgeCard(
+            borderGradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [CustomColors.primary, CustomColors.primary], // aqua → violeta
+            ),
+            onTap: onTap,
+            child:Text(
+              titleButton, 
+              style:Theme.of(context).textTheme.titleMedium!.copyWith(color: CustomColors.white),
+              textAlign: TextAlign.center,
+            )
+          ),
+        ],
+      )
     );
   }
 }

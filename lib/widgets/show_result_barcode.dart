@@ -13,6 +13,11 @@ import 'package:qr_master/services/function_class.dart';
 import 'package:intl/intl.dart';
 import 'package:qr_master/widgets/content_type_contact.dart';
 import 'package:qr_master/widgets/content_type_email.dart';
+import 'package:qr_master/widgets/content_type_event.dart';
+import 'package:qr_master/widgets/content_type_location.dart';
+import 'package:qr_master/widgets/content_type_sms.dart';
+import 'package:qr_master/widgets/content_type_unknown.dart';
+import 'package:qr_master/widgets/content_type_wifi.dart';
 
 
 Widget showResultBarcodeScreen({required BuildContext context, required Barcode barcode,required String raw}){
@@ -331,139 +336,24 @@ Widget showResultBarcodeScreen({required BuildContext context, required Barcode 
             ),
           );
         break;
-        case ContentType.text: 
-          response = Card(
-            color: CustomColors.primaryDark,
-            elevation: 4,
-            child: Container(
-              padding: const EdgeInsets.fromLTRB(10, 12, 10, 24),
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                color: CustomColors.primaryDark,
-                border: Border.all( color: CustomColors.white),
-                borderRadius: BorderRadius.circular(Constants.borderRadius),
-              ),
-              child: Column(
-                children: [
-                  SelectableText(
-                    raw, 
-                    style:Theme.of(context).textTheme.titleMedium!.copyWith(color: CustomColors.white, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 20),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child:RichText(
-                      textAlign: TextAlign.left,
-                      text: TextSpan(
-                        style: DefaultTextStyle.of(context).style,
-                        children: <TextSpan>[
-                          TextSpan(
-                            text: translate('type'), 
-                            style: Theme.of(context).textTheme.bodySmall!.copyWith(color: CustomColors.white, fontWeight: FontWeight.bold),
-                          ),
-                          TextSpan(
-                            text:": ${barcode.format.name} - ${translate("text")}",
-                          style: Theme.of(context).textTheme.bodySmall!.copyWith(color: CustomColors.white),
-                          ),
-                          TextSpan(
-                            text:"\n $formatted",
-                          style: Theme.of(context).textTheme.bodySmall!.copyWith(color: CustomColors.white),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ), 
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: Wrap(
-                      runAlignment: WrapAlignment.spaceBetween,
-                      alignment: WrapAlignment.spaceAround,
-                      children: [
-// COPY BUTTON
-                        TextButton.icon(
-                          onPressed: (){
-                            Clipboard.setData(ClipboardData(text: raw));
-                            snackBarCustom(context, subtitle: translate("QR code value copied successfully"));
-                          }, 
-                          label: Text(
-                            translate('copy'), 
-                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: CustomColors.white),
-                          ),
-                          iconAlignment:IconAlignment.start,
-                          icon:Icon(
-                          Icons.copy,
-                            color: CustomColors.warning,
-                            size: Theme.of(context).textTheme.bodyLarge!.fontSize,
-                          )
-                        ),
-// SEARCH IN WEB
-                        TextButton.icon(
-                          onPressed: (){
-                            FunctionsClass().redirectUrl(url: url);
-                          }, 
-                          label: Text(
-                            translate('search'), 
-                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: CustomColors.white),
-                          ),
-                          iconAlignment:IconAlignment.start,
-                          icon:Icon(
-                            Icons.open_in_browser,
-                            color: CustomColors.warning,
-                            size: Theme.of(context).textTheme.bodyLarge!.fontSize,
-                          )
-                        ),
-// SAVE
-                        TextButton.icon(
-                          onPressed: ()async{
-                            showCircularLoadingDialog(context);
-                            qrRecord = qrRecord.copyWith(
-                              content: raw,
-                              type: QrRecord.typeScan,
-                              createdAt: DateTime.now(),
-                              symbology: barcode.format,
-                            );
-                            await QrRecordController().saveQrRecord(qrRecord:qrRecord);
-                            if(!context.mounted) return;
-                            Navigator.of(context).pop();
-                            snackBarCustom(context, subtitle: translate("saved successfully"));
-                          }, 
-                          label: Text(
-                            translate('save'), 
-                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: CustomColors.white),
-                          ),
-                          iconAlignment:IconAlignment.start,
-                          icon:Icon(
-                            Icons.save,
-                            color: CustomColors.warning,
-                            size: Theme.of(context).textTheme.bodyLarge!.fontSize,
-                          )
-                        ),
-                      ]
-                    ),
-                  ),
-                ],
-              ),
-            )
-          );
-        break;
         case ContentType.email: 
-          response = ContentTypeEmail( qrRecord: qrRecord, barcode:barcode, raw: raw, formatted: formatted);  
-
+          response = ContentTypeEmail(qrRecord: qrRecord, barcode:barcode, raw: raw, formatted: formatted);  
         break;
         case ContentType.wifi: 
-
+          response = ContentTypeWifi(qrRecord: qrRecord, barcode:barcode, raw: raw, formatted: formatted);
         break;
         case ContentType.location: 
-
+          response = ContentTypeLocation(qrRecord: qrRecord, barcode:barcode, raw: raw, formatted: formatted);
         break;
         case ContentType.event: 
-
+          response = ContentTypeEvent(qrRecord: qrRecord, barcode:barcode, raw: raw, formatted: formatted);
         break;
         case ContentType.sms: 
-
+          response = ContentTypeSmS(qrRecord: qrRecord, barcode:barcode, raw: raw, formatted: formatted);
         break;
         case ContentType.unknown: 
-
+         case ContentType.text: 
+          response = ContentTypeUnknown(qrRecord: qrRecord, barcode:barcode, raw: raw, formatted: formatted);
         break;
     }
   }

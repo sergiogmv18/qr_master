@@ -1,11 +1,12 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer' as dev;
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:plugin_wifi_connect/plugin_wifi_connect.dart';
 import 'package:qr_master/components/snack_bar_custom.dart';
 import 'package:qr_master/controllers/translation_controller.dart';
-import 'package:qr_master/widgets/content_type_email.dart';
+import 'package:qr_master/widgets/content_type_wifi.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:intl/intl.dart' as intl;
@@ -13,6 +14,12 @@ import 'package:intl/intl.dart' as intl;
 
 
 class FunctionsClass {
+
+
+
+  static bool _connecting = false;
+  static Timer? _debounce;
+
 
   /* Launches a URL in the default browser or appropriate app.
   * @author  SGV - 20250812
@@ -360,23 +367,11 @@ class FunctionsClass {
   * @example  
   *   await openAddressInMaps("123 Main St, City, Country");
   */
-  Future<void> openAddressInMaps(String address) async {
+  Future<void> openAddressInMaps(String address, {bool isGeo = false}) async {
     final q = Uri.encodeComponent(address);
-
-    // iOS: intenta app de Google Maps, luego Apple Maps, luego web.
-    if (Platform.isIOS) {
-      final gmapsIOS = Uri.parse('comgooglemaps://?q=$q&zoom=16');
-      if (await canLaunchUrl(gmapsIOS)) {
-        await launchUrl(gmapsIOS);
-        return;
-      }
-      final apple = Uri.parse('http://maps.apple.com/?q=$q');
-      if (await canLaunchUrl(apple)) {
-        await launchUrl(apple, mode: LaunchMode.externalApplication);
-        return;
-      }
-      final web = Uri.parse('https://www.google.com/maps/search/?api=1&query=$q');
-      await launchUrl(web, mode: LaunchMode.externalApplication);
+    if(isGeo){
+      final uri = Uri.parse(address);
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
       return;
     }
     // Android: intenta intent geo:, luego web.
@@ -555,17 +550,73 @@ class FunctionsClass {
 
 
 
+
   String formatDateAuto(BuildContext context, DateTime date, {bool abbreviated = true}) {
-  final locale = Localizations.localeOf(context).toString(); // p.ej. "es_ES"
-  // Abreviado:  "23, may de 2025" (es) / "May 23, 2025" (en) / …
-  // Completo:   "23 de mayo de 2025" (es) / "May 23, 2025" (en) / …
-  if (abbreviated) {
-    // yMMMd produce una forma corta localizada (incluye comas si el idioma las usa)
-    return intl.DateFormat.yMMMd(locale).format(date);
-  } else {
-    // yMMMMd produce la forma larga localizada e incluye “de” en español automáticamente
-    return intl.DateFormat.yMMMMd(locale).format(date);
+    final locale = Localizations.localeOf(context).toString(); // p.ej. "es_ES"
+    // Abreviado:  "23, may de 2025" (es) / "May 23, 2025" (en) / …
+    // Completo:   "23 de mayo de 2025" (es) / "May 23, 2025" (en) / …
+    if (abbreviated) {
+      // yMMMd produce una forma corta localizada (incluye comas si el idioma las usa)
+      return intl.DateFormat.yMMMd(locale).format(date);
+    } else {
+      // yMMMMd produce la forma larga localizada e incluye “de” en español automáticamente
+      return intl.DateFormat.yMMMMd(locale).format(date);
+    }
   }
-}
+
+
+
+/// Llama esto desde tu onTap/acción del usuario
+  Future<bool> connectFromWifiQrGuarded(String qr) async {
+    // Debounce: si el usuario toca varias veces en <300ms>, solo 1 intento
+    _debounce?.cancel();
+    final c = Completer<bool>();
+    _debounce = Timer(const Duration(milliseconds: 300), () async {
+      if (_connecting) {
+        c.complete(false);
+        return;
+      }
+      _connecting = true;
+      try {
+        final creds = parseWifiQr(qr);
+        if (creds == null || creds.ssid!.isEmpty) {
+          c.complete(false);
+          return;
+        }
+
+        final type = (creds.authType ?? 'WPA').toUpperCase();
+        final isOpen = type == 'OPEN' || type == 'NOPASS';
+
+        bool? ok;
+        try {
+          if (isOpen) {
+            ok = await (PluginWifiConnect.connect(creds.ssid!) );
+          } else if (type == 'WPA3') {
+            ok = await (PluginWifiConnect.connectToSecureNetwork(
+              creds.ssid!, creds.password ?? '', isWpa3: true, saveNetwork: false,
+            ));
+          } else {
+            ok = await (PluginWifiConnect.connectToSecureNetwork(
+              creds.ssid!, creds.password ?? '', saveNetwork: false,
+            ));
+          }
+        } on PlatformException catch (e) {
+          // Ignora/normaliza los casos conocidos del plugin
+          final txt = '${e.message} ${e.details}'.toLowerCase();
+          if (txt.contains('networkcallback was already unregistered') ||
+              txt.contains('networkcallback was not registered')) {
+            ok = true; // la red probablemente ya está establecida o el callback ya cerró
+          } else {
+            ok = false;
+          }
+        }
+        c.complete(ok);
+      } finally {
+        _connecting = false;
+      }
+    });
+    return c.future;
+  }
+
 }
     
