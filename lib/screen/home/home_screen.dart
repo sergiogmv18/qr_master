@@ -9,6 +9,7 @@ import 'package:qr_master/controllers/translation_controller.dart';
 import 'package:qr_master/provider/botton_navigator_bar_provider.dart';
 import 'package:qr_master/screen/home/dashboard_screen.dart';
 import 'package:qr_master/screen/home/history_screen.dart';
+import 'package:qr_master/screen/qr/create_qr_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -61,6 +62,8 @@ class _HomeScreenState extends State<HomeScreen> {
     switch(index){
       case 0: 
       return DashboardScreen();
+      case 1: 
+      return CreateQrScreen();
       case 2: 
       return HistoryScreen();
     }

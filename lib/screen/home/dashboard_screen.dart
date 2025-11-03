@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_master/components/plan_current_suscription.dart';
 import 'package:qr_master/config/route_app.dart';
 import 'package:qr_master/config/style.dart';
 import 'package:qr_master/controllers/translation_controller.dart';
+import 'package:qr_master/provider/botton_navigator_bar_provider.dart';
 import 'package:qr_master/screen/ads_mod/banner_ad.dart';
 import 'package:qr_master/screen/ads_mod/native_ad.dart';
 class DashboardScreen extends StatefulWidget {
@@ -80,6 +82,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
           AdaptiveBanner(),
   // CREATE QR
             PlanBadgeCard(
+              onTap: () {
+                Provider.of<BottonNavigationBarProvider>(context, listen: false).currentIndexPage = 1; 
+                Navigator.of(context).pushNamedAndRemoveUntil(RouteAppName.homeScreen,(route) => false);
+              },
             borderGradient: const LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -87,7 +93,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             child: Column(
               children: [
-                Icon(Icons.qr_code, color: Colors.white, size: 50,),
+                Icon(Icons.qr_code, color: Colors.white, size: 50),
                 Text(
                   translate('create QR'),
                   style:Theme.of(context).textTheme.headlineSmall!.copyWith(

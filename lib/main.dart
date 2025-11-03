@@ -7,6 +7,7 @@ import 'package:qr_master/provider/botton_navigator_bar_provider.dart';
 import 'package:qr_master/provider/provider_history.dart';
 import 'package:qr_master/provider/provider_native_ad.dart';
 import 'package:qr_master/provider/provider_scanqr.dart';
+import 'package:qr_master/provider/qr_create_provider.dart';
 import 'package:qr_master/qr_master.dart';
 import 'package:qr_master/services/service_locator.dart';
 
@@ -35,6 +36,8 @@ void main() async {  // Añade async aquí
         ChangeNotifierProvider<BottonNavigationBarProvider>(create: (_) => BottonNavigationBarProvider()),
         ChangeNotifierProvider<ScanQrProvider>(create: (_) => ScanQrProvider()),
         ChangeNotifierProvider<ProviderHistory>(create: (_) => ProviderHistory()),
+        ChangeNotifierProvider<QrCreateProvider>(create: (_) => QrCreateProvider()),
+        
         ChangeNotifierProvider(
           create: (_) => NativeAdProvider(
             adUnitId: _kNativeUnitId, // troque pelo seu

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:qr_master/config/constanst.dart';
-import 'package:qr_master/config/style.dart';
 import 'package:qr_master/screen/ads_mod/interstitial_ad.dart';
 import 'package:qr_master/services/function_class.dart';
 import 'package:qr_master/screen/scan/result_sheet.dart';

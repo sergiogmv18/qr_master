@@ -197,52 +197,7 @@ getIconToType(){
     );
   }
 
-
-  getAllTypeOfQR(){
-    List<Map<String,dynamic>> allTypeOfQR = [
-      {
-        "name":translate("web site"),
-        "url": "",
-        "icon":"",
-      },
-      {
-        "name":translate("contact"),
-        "url": "",
-        "icon":"",
-      },
-      {
-        "name":translate("text"),
-        "url": "",
-        "icon":"",
-      },
-      {
-        "name":translate("email address"),
-        "url": "",
-        "icon":"",
-      },
-      {
-        "name":translate("wifi"),
-        "url": "",
-        "icon":"",
-      },
-      {
-        "name":translate("location"),
-        "url": "",
-        "icon":"",
-      },
-      {
-        "name":translate("event"),
-        "url": "",
-        "icon":"",
-      },
-      {
-        "name":translate("SMS"),
-        "url": "",
-        "icon":"",
-      },
-    ];
-    return allTypeOfQR;
-  }
+    
 
   geAllType2Dcode(){
     List<Map<String,dynamic>> allTypeOfQR2D = [
@@ -376,6 +331,10 @@ getIconToType(){
     }
   }
 
+
+
+
+  
 
 
   // Detecta el tipo de contenido a partir del texto crudo.
