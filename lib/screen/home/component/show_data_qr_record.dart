@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:qr_master/config/style.dart';
 import 'package:qr_master/models/qr_record.dart';
+import 'package:qr_master/screen/qr/component/show_confirm_delete_qr.dart';
 import 'package:qr_master/services/function_class.dart';
 
 class ShowDataQrRecord extends StatelessWidget {
@@ -15,7 +16,7 @@ class ShowDataQrRecord extends StatelessWidget {
       direction: DismissDirection.endToStart,
       confirmDismiss: (direction) async {
         if (direction == DismissDirection.endToStart) {
-          // showConfirmDeleteClient(context: context, client:client);
+           showConfirmDeleteQrRecord(context: context, qrRecord:qrRecord);
         }
         return false;
       },  

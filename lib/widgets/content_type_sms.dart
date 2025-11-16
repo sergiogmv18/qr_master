@@ -115,7 +115,7 @@ class ContentTypeSmS extends StatelessWidget {
                           style: Theme.of(context).textTheme.bodySmall!.copyWith(color: CustomColors.white, fontWeight: FontWeight.bold),
                         ),
                         TextSpan(
-                          text:": ${barcode?.format.name} - ${translate("event")}",
+                          text:":${barcode?.format.name} - ${translate("sms")}",
                         style: Theme.of(context).textTheme.bodySmall!.copyWith(color: CustomColors.white),
                         ),
                         TextSpan(

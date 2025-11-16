@@ -43,7 +43,7 @@ snackBarCustom(BuildContext context, {String type ="success", String? title,Dura
     titleColor: textColor,
     message: subtitle,
     messageColor: textColor,
-    messageSize:Theme.of(context).textTheme.titleLarge!.fontSize,
+    messageSize:Theme.of(context).textTheme.titleMedium!.fontSize,
     duration: duration,
     backgroundColor: backgroundColor,
 

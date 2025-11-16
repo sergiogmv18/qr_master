@@ -16,6 +16,7 @@ class Constants {
 class IMGConst {
   static const mainImg = "assets/img";
   static const logo = "$mainImg/logo.jpg";
+  static const check ="$mainImg/check.gif";
  
 
 }

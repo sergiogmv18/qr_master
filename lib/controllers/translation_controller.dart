@@ -7,8 +7,11 @@ import 'package:qr_master/services/translate_json.dart';
 class TranslationController extends ChangeNotifier {
   static const List<Locale> supportedLocales = [
     Locale('en'),
-    Locale('pt', 'BR'),
-    Locale('es')
+    Locale('pt'),
+    Locale('es'),
+    Locale('de'),
+    Locale('fr'),
+    Locale('it'),
   ];
   
   static final TranslationController _instance = TranslationController._();
@@ -117,7 +120,7 @@ class TranslationDelegate extends LocalizationsDelegate<TranslationController> {
   const TranslationDelegate();
 
   @override
-  bool isSupported(Locale locale) => ['en', 'pt','es' ].contains(locale.languageCode);
+  bool isSupported(Locale locale) => ['es' "en", "pt", "es", "de","fr", "it"].contains(locale.languageCode);
 
   @override
   Future<TranslationController> load(Locale locale) async {

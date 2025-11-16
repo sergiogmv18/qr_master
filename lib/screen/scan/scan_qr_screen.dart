@@ -109,7 +109,7 @@ class _ScanQrScreenContent extends StatelessWidget {
       );
     }
     return IconButton(
-      tooltip: 'Linterna',
+      tooltip: translate('flashlight'),
       onPressed:(){
         if(!provider.hasTorch!){
           provider.toggleTorch();

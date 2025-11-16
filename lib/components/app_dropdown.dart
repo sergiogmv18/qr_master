@@ -9,6 +9,7 @@ class AppDropdown<T> extends StatelessWidget {
   final String label;
   final double? width;
   final bool enableFilter;
+  final Widget? leadingIcon;
   const AppDropdown({
     super.key,
     required this.items,
@@ -17,6 +18,7 @@ class AppDropdown<T> extends StatelessWidget {
     required this.label,
     this.width,
     this.enableFilter = false,
+    this.leadingIcon,
   });
 
   @override
@@ -73,7 +75,7 @@ class AppDropdown<T> extends StatelessWidget {
           requestFocusOnTap: false,
           menuHeight: 320,
           label: Text(label),
-          leadingIcon: const Icon(Icons.qr_code_2, color: CustomColors.primary),
+          leadingIcon: leadingIcon,
           dropdownMenuEntries: items,
           initialSelection: value,
           onSelected: onChanged,

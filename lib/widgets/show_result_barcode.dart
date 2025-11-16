@@ -192,6 +192,7 @@ Widget showResultBarcodeScreen({required BuildContext context, required Barcode 
 // DEFAULT
     default:
       ContentType contentType = qrRecord.detectContentType(raw);
+      FunctionsClass.debugDumpAndDie(contentType);
       switch(contentType){
         case ContentType.website: 
           response = Column(

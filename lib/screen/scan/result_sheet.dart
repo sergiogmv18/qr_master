@@ -24,6 +24,7 @@ class ResultScanScreen extends StatefulWidget {
 }
 
 class _ResultScanScreenState extends State<ResultScanScreen> {
+  
   @override
   Widget build(BuildContext context) {
     return Consumer<ScanQrProvider>(

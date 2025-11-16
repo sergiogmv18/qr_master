@@ -1,10 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer' as dev;
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:plugin_wifi_connect/plugin_wifi_connect.dart';
 import 'package:qr_master/components/snack_bar_custom.dart';
+import 'package:qr_master/config/constanst.dart';
+import 'package:qr_master/config/style.dart';
 import 'package:qr_master/controllers/translation_controller.dart';
 import 'package:qr_master/widgets/content_type_wifi.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -618,5 +623,196 @@ class FunctionsClass {
     return c.future;
   }
 
+
+    /*
+  * add 20 years to current date or specified initial date
+  * @author  SGV
+  * @version 1.0 - 20250826 - initial release
+  * @param   initialDate - optional DateTime to use as base date (default: current date)
+  * @return  DateTime - resulting date after adding 20 years
+  * @throws  
+  * @see     
+  * @note    uses current date if no initialDate is provided
+  *          preserves the same month and day from the base date
+  *          handles leap years and month boundaries automatically
+  *          useful for calculating expiration dates or long-term deadlines
+  * @example 
+  *   add20YearsToNow(); // returns current date + 20 years
+  *   add20YearsToNow(initialDate: DateTime(2020, 1, 1)); // returns January 1, 2040
+  */
+  static DateTime add20YearsToNow({DateTime? initialDate}) {
+    final now =initialDate ?? DateTime.now();
+    return DateTime(now.year + 20, now.month, now.day);
+  }
+
+  /*
+  * Displays a color picker dialog for color selection with alpha channel support
+  * @author  SGV
+  * @version 1.0 - 20250728 - initial release
+  * @param   context - BuildContext for dialog display and theming
+  * @param   initial - Initial color to display in the picker
+  * @return  Future<Color?> - Selected color or null if cancelled
+  */
+  Future<Color?> pickColor(BuildContext context, Color initial) async {
+    Color current = initial;
+    return showDialog<Color>(
+      context: context,
+      builder: (_) => AlertDialog(
+        backgroundColor: CustomColors.primaryDark,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Constants.borderRadius)),
+        title:Text(translate("select color"), style: Theme.of(context).textTheme.titleLarge!.copyWith(color: CustomColors.white)),
+        content:SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: SingleChildScrollView(
+          child: Column(
+            children: [
+              ColorPicker(
+                pickerColor: current,
+                onColorChanged: (c) => current = c,
+                enableAlpha: true,     // deslizador de opacidad
+                displayThumbColor: true,
+                labelTextStyle:Theme.of(context).textTheme.titleMedium!.copyWith(color: CustomColors.white),          
+                pickerAreaBorderRadius: BorderRadius.all(Radius.circular(Constants.borderRadius)),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                '#${current.value.toRadixString(16).padLeft(8, '0').toUpperCase()}',
+                style:Theme.of(context).textTheme.titleMedium!.copyWith(color: CustomColors.white),   
+              ),
+            ],
+          ),
+        ),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: Text(translate("cancel"), style:Theme.of(context).textTheme.titleMedium!.copyWith(color: CustomColors.error))),
+          TextButton(onPressed: () =>  Navigator.pop(context, current), child: Text(translate("OK"), style:Theme.of(context).textTheme.titleMedium!.copyWith(color: CustomColors.white))),
+        ],
+      ),
+    );
+  }
+
+
+  /* Captures or selects an image and converts it to base64 format with metadata.
+  * @author  SGV - 202508008
+  * @version 1.0 - 202508008 - initial release
+  * 
+  * @param   context - Required for platform permissions
+  * @param   fromCamera - Source selection flag:
+  *           - true: Uses device camera
+  *           - false: Uses gallery (default)
+  * 
+  * @return  Future<Map<String, dynamic>?> - Image data containing:
+  *           - base64: String (Base64 encoded image)
+  *           - bytes: Uint8List (Raw image bytes)
+  *           - fileName: String (Original filename)
+  *           - path: String (Local file path)
+  *           - extension: String (File extension)
+  *           - Returns null if cancelled
+  * 
+  * Process Flow:
+  *  1. Requests image from selected source
+  *  2. Applies 85% quality compression
+  *  3. Converts to base64 string
+  *  4. Packages all metadata
+  * 
+  * Usage Examples:
+  *  // From gallery
+  *  final image = await pickImageAsBase64(context);
+  *  
+  *  // From camera
+  *  final selfie = await pickImageAsBase64(
+  *    context, 
+  *    fromCamera: true
+  *  );
+  * 
+  * Dependencies:
+  *  - image_picker package
+  *  - dart:convert for base64 encoding
+  * 
+  * Platform Notes:
+  *  - Requires camera/gallery permissions
+  *  - Handles cancellation gracefully
+  *  - iOS/Android compatible
+  */
+  Future<Map<String, dynamic>?> pickImageAsBase64({required BuildContext context, bool fromCamera = false}) async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? pickedFile = await picker.pickImage(
+      source: fromCamera ? ImageSource.camera : ImageSource.gallery,
+      imageQuality: 85, 
+    );
+    if (pickedFile == null) return null;
+    final Uint8List bytes = await pickedFile.readAsBytes();
+    final String base64String = base64Encode(bytes);
+    return {
+      'base64': base64String,
+      'bytes': bytes,
+      'fileName': pickedFile.name,
+      'path': pickedFile.path,
+      "file":File(pickedFile.path),
+      'extension': pickedFile.name.split('.').last
+    };
+  }
+
+
+ /* Validates an email address against standard formatting rules.
+  * @author  SGV - 20250729
+  * @version 1.0 - 20250729 - initial release
+  * 
+  * @param   email - Email address to validate
+  * @return  Map<String,dynamic> - Validation result containing:
+  *           - isValid: bool (proper email format)
+  *           - message: String (validation status)
+  *           - errors: List<String> (empty list for consistency)
+  * 
+  * Validation Rules:
+  *  - Must contain @ symbol
+  *  - Requires valid domain (e.g. example.com)
+  *  - Requires valid top-level domain (.com, .io, etc.)
+  *  - No spaces allowed
+  *  - Follows RFC 5322 standard regex pattern
+  * 
+  * Usage Example:
+  *   final result = validateEmailAddress("user@example.com");
+  *   if(!result['isValid']) {
+  *     showError(result['message']);
+  *   }
+  * 
+  * Output Example:
+  *   {
+  *     isValid: true,
+  *     message: "Valid email address",
+  *     errors: []
+  *   }
+  * 
+  * Notes:
+  *  - Does not verify if email actually exists
+  *  - Maintains consistent return structure with other validators
+  */
+  Map<String, dynamic> validateEmailAddress(String email) {
+    final errors = <String>[];
+    const pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
+    final regExp = RegExp(pattern);
+
+    if (email.isEmpty) {
+      return {
+        'isValid': false,
+        'message': 'El correo electrónico no puede estar vacío.',
+        'errors': ['empty_email']
+      };
+    }
+
+    if (!regExp.hasMatch(email)) {
+      return {
+        'isValid': false,
+        'message': 'Por favor ingrese un correo electrónico válido.',
+        'errors': ['invalid_format']
+      };
+    }
+    return {
+      'isValid': true,
+      'message': 'Email is valid',
+      'errors': errors
+    };
+  }
 }
     
