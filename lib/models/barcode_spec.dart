@@ -42,7 +42,7 @@ static List<BarcodeSpec> kBarcodeTypes = [
     build: _qrMedium,
     supportsContent: true,
     contentTypes: {
-      ContentTypeModel(serverId:1, label:translate("web site"), value: ContentType.website),
+      ContentTypeModel(serverId:1, label:translate("web"), value: ContentType.website),
       ContentTypeModel(serverId:2, label:translate("contact"), value: ContentType.contact),
       ContentTypeModel(serverId:3, label:translate("text"), value: ContentType.text),
       ContentTypeModel(serverId:4, label:translate("email address"), value: ContentType.email),
@@ -59,7 +59,7 @@ static List<BarcodeSpec> kBarcodeTypes = [
     build: Barcode.aztec,
     supportsContent: true,
     contentTypes: {
-      ContentTypeModel(serverId:1, label:translate("web site"), value: ContentType.website),
+      ContentTypeModel(serverId:1, label:translate("web"), value: ContentType.website),
       ContentTypeModel(serverId:2, label:translate("contact"), value: ContentType.contact),
       ContentTypeModel(serverId:3, label:translate("text"), value: ContentType.text),
       ContentTypeModel(serverId:4, label:translate("email address"), value: ContentType.email),
@@ -73,7 +73,7 @@ static List<BarcodeSpec> kBarcodeTypes = [
     build: Barcode.dataMatrix,
     supportsContent: true,
     contentTypes: { 
-      ContentTypeModel(serverId:1, label:translate("web site"), value: ContentType.website),
+      ContentTypeModel(serverId:1, label:translate("web"), value: ContentType.website),
       ContentTypeModel(serverId:2, label:translate("contact"), value: ContentType.contact),
       ContentTypeModel(serverId:3, label:translate("text"), value: ContentType.text)
     },

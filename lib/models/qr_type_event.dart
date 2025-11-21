@@ -233,4 +233,89 @@ static QrTypeEvent parseVEventToQrTypeEvent(String vevent) {
   );
   return event;
 }
+
+
+ String toVEvent() {
+    final buffer = StringBuffer();
+
+    buffer.writeln('BEGIN:VEVENT');
+    // SUMMARY (title)
+    if (title != null && title!.trim().isNotEmpty) {
+      buffer.writeln(
+        _foldIcsLine('SUMMARY:${_icsEscape(title!.trim())}'),
+      );
+    }
+
+    // DESCRIPTION
+    if (description != null && description!.trim().isNotEmpty) {
+      buffer.writeln(
+        _foldIcsLine('DESCRIPTION:${_icsEscape(description!.trim())}'),
+      );
+    }
+
+    // LOCATION
+    if (addressEvent != null && addressEvent!.trim().isNotEmpty) {
+      buffer.writeln(
+        _foldIcsLine('LOCATION:${_icsEscape(addressEvent!.trim())}'),
+      );
+    }
+
+    // DTSTART
+    if (initialDate != null) {
+      final dtStart = _formatIcsDateTime(initialDate!);
+      buffer.writeln('DTSTART:$dtStart');
+    }
+
+    // DTEND
+    if (finalDate != null) {
+      final dtEnd = _formatIcsDateTime(finalDate!);
+      buffer.writeln('DTEND:$dtEnd');
+    }
+
+    buffer.writeln('END:VEVENT');
+
+    return buffer.toString();
+  }
+
+  String _twoDigits(int n) => n.toString().padLeft(2, '0');
+
+
+  String _formatIcsDateTime(DateTime dt) {
+    final d = dt;
+    return '${d.year.toString().padLeft(4, '0')}'
+        '${_twoDigits(d.month)}'
+        '${_twoDigits(d.day)}'
+        'T'
+        '${_twoDigits(d.hour)}'
+        '${_twoDigits(d.minute)}'
+        '${_twoDigits(d.second)}Z';
+  }
+
+  String _icsEscape(String v) {
+    return v
+        .replaceAll('\\', '\\\\')
+        .replaceAll(';', '\\;')
+        .replaceAll(',', '\\,')
+        .replaceAll('\n', '\\n');
+  }
+
+  /// Corta en 75 chars y hace folding (líneas continuadas empiezan con espacio)
+  String _foldIcsLine(String line, {int limit = 75}) {
+    if (line.length <= limit) return line;
+
+    final buffer = StringBuffer();
+    var i = 0;
+    while (i < line.length) {
+      final end = (i + limit < line.length) ? i + limit : line.length;
+      final chunk = line.substring(i, end);
+      if (i == 0) {
+        buffer.writeln(chunk);
+      } else {
+        buffer.writeln(' $chunk');
+      }
+      i = end;
+    }
+    return buffer.toString().trimRight();
+  }
+
 }

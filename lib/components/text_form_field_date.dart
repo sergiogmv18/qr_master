@@ -6,7 +6,7 @@ import 'package:qr_master/config/style.dart';
 import 'package:qr_master/controllers/translation_controller.dart';
 import 'package:qr_master/services/function_class.dart';
 
-Future<DateTime?> selectDate({  required BuildContext context, DateTime? initialDate, DateTime? currentDate, DateTime? firstDate, DateTime? lastDate }) async {
+Future<DateTime?> selectDate({required BuildContext context, DateTime? initialDate, DateTime? currentDate, DateTime? firstDate, DateTime? lastDate }) async {
   
   // Ajustar initialDate para que no sea anterior a firstDate
   DateTime effectiveInitialDate = initialDate ?? lastDate ?? DateTime.now();

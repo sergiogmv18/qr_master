@@ -32,7 +32,7 @@ class ContentTypeModel extends ModelBase{
   static getAllContentType(){
     List<ContentTypeModel> allTypeOfQR = [
       ContentTypeModel(serverId:3, label:translate("text"), value: ContentType.text),
-      ContentTypeModel(serverId:1, label:translate("web site"), value: ContentType.website),
+      ContentTypeModel(serverId:1, label:translate("web"), value: ContentType.website),
       ContentTypeModel(serverId:2, label:translate("contact"), value: ContentType.contact),
       ContentTypeModel(serverId:4, label:translate("email address"), value: ContentType.email),
       ContentTypeModel(serverId:5, label:translate("wifi"), value: ContentType.wifi),

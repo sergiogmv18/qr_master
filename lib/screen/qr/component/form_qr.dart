@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:qr_master/models/content_type.dart';
-import 'package:qr_master/screen/qr/component/form_contem_type_email.dart';
+import 'package:qr_master/screen/qr/component/form_content_type_email.dart';
 import 'package:qr_master/screen/qr/component/form_contem_type_sms.dart';
 import 'package:qr_master/screen/qr/component/form_content_type_contact.dart';
+import 'package:qr_master/screen/qr/component/form_content_type_event.dart';
 import 'package:qr_master/screen/qr/component/form_content_type_text.dart';
 import 'package:qr_master/screen/qr/component/form_content_type_web_site.dart';
 import 'package:qr_master/screen/qr/component/form_content_type_wifi.dart';
@@ -47,7 +48,10 @@ class _FormQrCreateState extends State<FormQrCreate> {
 // TYPE SMS
         if(widget.contentTypeModel.value == ContentType.sms)...[
           FormContemTypeSms(),
-        ] 
+        ],
+        if(widget.contentTypeModel.value == ContentType.event)...[
+          FormContentTypeEvent(),
+        ]
       ]
     );
   }

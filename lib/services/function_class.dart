@@ -814,5 +814,17 @@ class FunctionsClass {
       'errors': errors
     };
   }
+
+
+  bool isValidTime(String value) {
+    final time = value.trim();
+
+    // Debe tener exactamente 5 caracteres: 00:00
+    if (time.length != 5) return false;
+
+    // RegEx para HH:mm en formato 24h (00–23:00–59)
+    final regex = RegExp(r'^([01]\d|2[0-3]):([0-5]\d)$');
+    return regex.hasMatch(time);
+  }
 }
     

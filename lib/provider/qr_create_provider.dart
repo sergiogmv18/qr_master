@@ -15,6 +15,13 @@ class QrCreateProvider with ChangeNotifier {
   Color colorQrEyeShape = CustomColors.primary;
   Color backgroundColor = CustomColors.white;
   QrDataModuleShape styleQrDataModuleShape = QrDataModuleShape.square;
+  bool showSecundaryDropdownMenu = true;
+  BarcodeSpec selectedDropdownItem = BarcodeSpec.kBarcodeTypes.first;
+  ContentTypeModel selectedDropdownItemSecundary = ContentTypeModel.getAllContentType()[0];
+  DateTime initialDateEvent = DateTime.now();
+  DateTime finalDateEvent = DateTime.now().add(const Duration(days: 1));
+  bool eventAllToday = false;
+
   List<Map<String, dynamic>> alltypeSupportedWifi = [
     {
       "name": "WPA/WPA2/WPA3",
@@ -154,6 +161,21 @@ class QrCreateProvider with ChangeNotifier {
   }
 
 
+  setInitialDateEvent(DateTime value){
+    initialDateEvent = value;
+    notifyListeners();
+  }
+
+  setFinalDateEvent(DateTime value){
+    finalDateEvent = value;
+    notifyListeners();
+  }
+
+  updateEventAllToday(bool value){
+    eventAllToday = value;
+    notifyListeners();
+  }
+
 
 
 
@@ -188,25 +210,8 @@ class QrCreateProvider with ChangeNotifier {
 
   
 
-  /*
-  * Flag to determine if secondary dropdown menu should be displayed
-  * Activated based on selected barcode type
-  * @author  SGV
-  * @version 1.0 - 20250728 - initial release
-  * @return bool
-  */
-  bool showSecundaryDropdownMenu = false;
 
- /*
-  * Currently selected item in the barcode specification dropdown
-  * @author  SGV
-  * @version 1.0 - 20250728 - initial release
-  * Defaults to first available barcode type
-  * @return BarcodeSpec
-  */
-  BarcodeSpec selectedDropdownItem = BarcodeSpec.kBarcodeTypes.first;
 
-  ContentTypeModel selectedDropdownItemSecundary = ContentTypeModel.getAllContentType()[0];
 
   /*
   * Updates the selected dropdown item and triggers UI update
@@ -266,14 +271,6 @@ class QrCreateProvider with ChangeNotifier {
       case BarcodeSpec(label:"QR Code"): 
       return FormQrCreate(contentTypeModel:selectedDropdownItemSecundary);
     }
-
-    // if(showSecundaryDropdownMenu){
-    //   FunctionsClass.debugDumpAndDie(selectedDropdownItem);
-    //   switch(selectedDropdownItemSecundary){
-
-    //   }
-    // }
-   // return FormAztec();
   }
 
 }

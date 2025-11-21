@@ -70,7 +70,7 @@ class TranslationController extends ChangeNotifier {
   }
   return (result.isNotEmpty && result != '%')
       ? result
-      : (capitilize ? '! ${text[0].toUpperCase()}${text.substring(1)}' : '! $text');
+      : (capitilize ? '! ${text[0].toUpperCase()}${text.substring(1)}' : '! $text');  
 }
   /*
    * Loads a translation from a markdown file in assets.

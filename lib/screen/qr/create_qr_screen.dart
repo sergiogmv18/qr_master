@@ -15,7 +15,13 @@ class CreateQrScreen extends StatefulWidget {
 }
 
 class _CreateQrScreenState extends State<CreateQrScreen> {
-  
+    @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<QrCreateProvider>(context, listen: false).verifySelectedBarcodeSpec();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
