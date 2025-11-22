@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:qr_master/config/style.dart';
 import 'package:qr_master/controllers/translation_controller.dart';
@@ -10,6 +12,11 @@ import 'package:qr_master/screen/qr/component/form_qr.dart';
 import 'package:qr_master/services/function_class.dart';
 
 class QrCreateProvider with ChangeNotifier {
+  GoogleMapController? mapLocationController;
+  double latController = 0;
+  double lngController = 0;
+  LatLng posicionLocation = const LatLng(0, -0);
+
   QrEyeShape styleQrEyeShape = QrEyeShape.square;
   File? logo;
   Color colorQrEyeShape = CustomColors.primary;
@@ -177,7 +184,27 @@ class QrCreateProvider with ChangeNotifier {
   }
 
 
+  updateMapLocationController({ required GoogleMapController controller}){
+    mapLocationController = controller;
+    notifyListeners();
+  }
 
+  updateMapLocationLatitude(double latitude){
+    latController = latitude;
+    udpdateLocationPosicion();
+    notifyListeners();
+  }
+
+  updateMapLocationLongitude(double longitude){
+    lngController = longitude;
+    udpdateLocationPosicion();
+    notifyListeners();
+  }
+  
+  udpdateLocationPosicion(){
+    posicionLocation = LatLng(latController, lngController);
+    
+  }
 
   /*
   * Provider for managing barcode specification dropdown menus state and logic
@@ -233,6 +260,7 @@ class QrCreateProvider with ChangeNotifier {
   }
 
 
+  
 
  /*
   * Verifies if the selected barcode spec requires showing secondary dropdown
@@ -271,6 +299,42 @@ class QrCreateProvider with ChangeNotifier {
       case BarcodeSpec(label:"QR Code"): 
       return FormQrCreate(contentTypeModel:selectedDropdownItemSecundary);
     }
+  }
+
+  Future<void> initUserLocation() async {
+    // 1. Verificar si el servicio de ubicación está activado
+    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Podrías mostrar un diálogo diciendo que active el GPS
+      return;
+    }
+    // 2. Verificar / pedir permisos
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Usuario negó, no hacemos nada
+        return;
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      // El usuario bloqueó permanentemente; solo queda mandar a ajustes
+      return;
+    }
+    // 3. Obtener posición actual
+    final position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+    latController = position.latitude;
+    lngController = position.longitude;
+    posicionLocation = LatLng(latController, lngController);
+    // Mover cámara si ya tenemos controller
+    if (mapLocationController != null) {
+      mapLocationController!.animateCamera(
+        CameraUpdate.newLatLng(posicionLocation),
+      );
+    }
+    notifyListeners();
   }
 
 }

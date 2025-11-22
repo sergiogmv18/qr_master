@@ -7,6 +7,7 @@ import 'package:qr_master/components/pop_scope_custom.dart';
 import 'package:qr_master/config/style.dart';
 import 'package:qr_master/controllers/translation_controller.dart';
 import 'package:qr_master/provider/botton_navigator_bar_provider.dart';
+import 'package:qr_master/screen/home/config_screen.dart';
 import 'package:qr_master/screen/home/dashboard_screen.dart';
 import 'package:qr_master/screen/home/history_screen.dart';
 import 'package:qr_master/screen/qr/create_qr_screen.dart';
@@ -66,6 +67,8 @@ class _HomeScreenState extends State<HomeScreen> {
       return CreateQrScreen();
       case 2: 
       return HistoryScreen();
+      case 3: 
+        return ConfigScreen();
     }
     
   }

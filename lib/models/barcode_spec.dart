@@ -53,42 +53,42 @@ static List<BarcodeSpec> kBarcodeTypes = [
     },
     hint: 'Ideal para URL, Wi-Fi, vCard, etc.',
   ),
-  BarcodeSpec(
-    id: 'aztec',
-    label: 'Aztec',
-    build: Barcode.aztec,
-    supportsContent: true,
-    contentTypes: {
-      ContentTypeModel(serverId:1, label:translate("web"), value: ContentType.website),
-      ContentTypeModel(serverId:2, label:translate("contact"), value: ContentType.contact),
-      ContentTypeModel(serverId:3, label:translate("text"), value: ContentType.text),
-      ContentTypeModel(serverId:4, label:translate("email address"), value: ContentType.email),
-      ContentTypeModel(serverId:6, label:translate("location"), value: ContentType.location),
-      ContentTypeModel(serverId:8, label:translate("SMS"), value: ContentType.sms),
-    },
-  ),
-  BarcodeSpec(
-    id: 'datamatrix',
-    label: 'Data Matrix',
-    build: Barcode.dataMatrix,
-    supportsContent: true,
-    contentTypes: { 
-      ContentTypeModel(serverId:1, label:translate("web"), value: ContentType.website),
-      ContentTypeModel(serverId:2, label:translate("contact"), value: ContentType.contact),
-      ContentTypeModel(serverId:3, label:translate("text"), value: ContentType.text)
-    },
-  ),
+  // BarcodeSpec(
+  //   id: 'aztec',
+  //   label: 'Aztec',
+  //   build: Barcode.aztec,
+  //   supportsContent: true,
+  //   contentTypes: {
+  //     ContentTypeModel(serverId:1, label:translate("web"), value: ContentType.website),
+  //     ContentTypeModel(serverId:2, label:translate("contact"), value: ContentType.contact),
+  //     ContentTypeModel(serverId:3, label:translate("text"), value: ContentType.text),
+  //     ContentTypeModel(serverId:4, label:translate("email address"), value: ContentType.email),
+  //     ContentTypeModel(serverId:6, label:translate("location"), value: ContentType.location),
+  //     ContentTypeModel(serverId:8, label:translate("SMS"), value: ContentType.sms),
+  //   },
+  // ),
+  // BarcodeSpec(
+  //   id: 'datamatrix',
+  //   label: 'Data Matrix',
+  //   build: Barcode.dataMatrix,
+  //   supportsContent: true,
+  //   contentTypes: { 
+  //     ContentTypeModel(serverId:1, label:translate("web"), value: ContentType.website),
+  //     ContentTypeModel(serverId:2, label:translate("contact"), value: ContentType.contact),
+  //     ContentTypeModel(serverId:3, label:translate("text"), value: ContentType.text)
+  //   },
+  // ),
 
-  // Lineales — NO muestran ContentType, piden “datos crudos”
-  BarcodeSpec(id: 'code128', label: 'Code 128', build: Barcode.code128, hint: 'Alfanumérico'),
-  BarcodeSpec(id: 'ean13', label: 'EAN-13', build: Barcode.ean13, hint: '12–13 dígitos'),
-  BarcodeSpec(id: 'ean8',  label: 'EAN-8',  build: Barcode.ean8,  hint: '7–8 dígitos'),
-  BarcodeSpec(id: 'upca',  label: 'UPC-A',  build: Barcode.upcA,  hint: '11–12 dígitos'),
-  BarcodeSpec(id: 'itf',   label: 'ITF',    build: Barcode.itf,   hint: 'Sólo dígitos, longitud par'),
-  BarcodeSpec(id: 'codabar', label: 'Codabar', build: Barcode.codabar),
-  BarcodeSpec(id: 'pdf417',  label: 'PDF417',  build: Barcode.pdf417),
-  BarcodeSpec(id: 'rm4scc',  label: 'RM4SCC',  build: Barcode.rm4scc),
-  BarcodeSpec(id: 'telepen', label: 'Telepen', build: Barcode.telepen),
+  // // Lineales — NO muestran ContentType, piden “datos crudos”
+  // BarcodeSpec(id: 'code128', label: 'Code 128', build: Barcode.code128, hint: 'Alfanumérico'),
+  // BarcodeSpec(id: 'ean13', label: 'EAN-13', build: Barcode.ean13, hint: '12–13 dígitos'),
+  // BarcodeSpec(id: 'ean8',  label: 'EAN-8',  build: Barcode.ean8,  hint: '7–8 dígitos'),
+  // BarcodeSpec(id: 'upca',  label: 'UPC-A',  build: Barcode.upcA,  hint: '11–12 dígitos'),
+  // BarcodeSpec(id: 'itf',   label: 'ITF',    build: Barcode.itf,   hint: 'Sólo dígitos, longitud par'),
+  // BarcodeSpec(id: 'codabar', label: 'Codabar', build: Barcode.codabar),
+  // BarcodeSpec(id: 'pdf417',  label: 'PDF417',  build: Barcode.pdf417),
+  // BarcodeSpec(id: 'rm4scc',  label: 'RM4SCC',  build: Barcode.rm4scc),
+  // BarcodeSpec(id: 'telepen', label: 'Telepen', build: Barcode.telepen),
 ];
 }
 

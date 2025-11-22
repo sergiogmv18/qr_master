@@ -67,7 +67,7 @@ class AppDropdown<T> extends StatelessWidget {
             border: Border.all( color: CustomColors.white),
         ),
         child: DropdownMenu<T>(
-          width: width,
+          width: width ?? double.infinity,
           trailingIcon:Icon(Icons.keyboard_arrow_down, color: CustomColors.white),
           selectedTrailingIcon: Icon(Icons.keyboard_arrow_up, color: CustomColors.white),
           controller: enableFilter ? TextEditingController() : null,

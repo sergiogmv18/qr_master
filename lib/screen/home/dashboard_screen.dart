@@ -76,8 +76,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 )
               ],
             ),
-          ),
-          
+          ),     
   // ADS
           AdaptiveBanner(),
   // CREATE QR

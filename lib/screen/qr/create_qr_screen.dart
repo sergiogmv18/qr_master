@@ -15,7 +15,7 @@ class CreateQrScreen extends StatefulWidget {
 }
 
 class _CreateQrScreenState extends State<CreateQrScreen> {
-    @override
+  @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -34,7 +34,11 @@ class _CreateQrScreenState extends State<CreateQrScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             spacing: 20,
             children: [
-              AppDropdown<BarcodeSpec>(
+              Row(
+                spacing: 5,
+                children: [
+                  Expanded(
+                    child: AppDropdown<BarcodeSpec>(
                 label: translate("code type"),
                 leadingIcon:  const Icon(Icons.qr_code_2, color: CustomColors.primary),
                 items:provider.entriesDropdownMenu,
@@ -43,11 +47,14 @@ class _CreateQrScreenState extends State<CreateQrScreen> {
                   if (val == null) return;
                   provider.updateSelectDropdownItem(val);
                 },
-                width: MediaQuery.of(context).size.width - 32, // full-width con margen
+                //width: MediaQuery.of(context).size.width - 32, // full-width con margen
                 enableFilter: false,
               ),
-              if(provider.showSecundaryDropdownMenu)...[
-                AppDropdown<ContentTypeModel>(
+                  
+                  ),
+                  if(provider.showSecundaryDropdownMenu)...[
+                  Expanded(
+                    child: AppDropdown<ContentTypeModel>(
                   label: translate("select format") ,
                   leadingIcon:  const Icon(Icons.qr_code_scanner, color: CustomColors.primary),
                   items:provider.entriesSecundaryDropdownMenu,
@@ -56,10 +63,13 @@ class _CreateQrScreenState extends State<CreateQrScreen> {
                     if (val == null) return;
                     provider.updateSelectDropdownItemSecundary(val);
                   },
-                  width: MediaQuery.of(context).size.width - 32, // full-width con margen
+                //  width: MediaQuery.of(context).size.width - 32, // full-width con margen
                   enableFilter: false,
                 ),
-              ],
+                  ),
+                  ]
+                ],
+              ),
               provider.showFormSelected(),
                       
             ]

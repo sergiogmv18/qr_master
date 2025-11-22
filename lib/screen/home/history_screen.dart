@@ -10,7 +10,7 @@ import 'package:qr_master/models/qr_record.dart';
 import 'package:qr_master/provider/botton_navigator_bar_provider.dart';
 import 'package:qr_master/provider/provider_history.dart';
 import 'package:qr_master/screen/ads_mod/banner_ad.dart';
-import 'package:qr_master/screen/home/component/show_data_qr_record.dart';
+import 'package:qr_master/screen/qr/component/show_data_qr_record.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});

@@ -39,6 +39,7 @@ class TranslationController extends ChangeNotifier {
 
     // tag de inicio válido (device o pasado por parámetro)
     final device = TranslationController.localeStatic;
+    
     final tag = startTag ?? bcp47From(device, fallback: 'en');
 
     // ✅ NUNCA "placeholder"
@@ -119,8 +120,9 @@ class TranslationController extends ChangeNotifier {
 class TranslationDelegate extends LocalizationsDelegate<TranslationController> {
   const TranslationDelegate();
 
+ 
   @override
-  bool isSupported(Locale locale) => ['es' "en", "pt", "es", "de","fr", "it"].contains(locale.languageCode);
+  bool isSupported(Locale locale) => ["es", "en", "pt", "es", "de","fr", "it"].contains(locale.languageCode);
 
   @override
   Future<TranslationController> load(Locale locale) async {

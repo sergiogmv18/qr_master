@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+import 'package:qr_master/config/route_app.dart';
 import 'package:qr_master/config/style.dart';
 import 'package:qr_master/models/qr_record.dart';
 import 'package:qr_master/screen/qr/component/show_confirm_delete_qr.dart';
@@ -38,6 +39,8 @@ class ShowDataQrRecord extends StatelessWidget {
           child: ListTile(
             onTap:(){
                 FunctionsClass.debugDumpAndDie(qrRecord.toString());
+                Navigator.of(context).pushNamedAndRemoveUntil(RouteAppName.specificQrScreen,(route) => false, arguments: qrRecord);
+                
             },
             leading: Icon(
               qrRecord.getIconToType(),
