@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:qr_master/config/route_app.dart';
+import 'package:qr_master/controllers/push_notification_controller.dart';
 import 'package:qr_master/services/shared_peferences.dart';
 import 'package:path/path.dart' as p;
 
@@ -18,9 +19,9 @@ class BaseController {
     String url = RouteAppName.homeScreen;
     bool? isLogged = await SharedPreferenceC().verifyInitialConfirmation();
     if(isLogged == null){
-     // await PuzzleController().saveLocale(); 
       await SharedPreferenceC().createUserLogged();
     }
+    await PushNotificationController().initialize(); 
     return url;
   }
 

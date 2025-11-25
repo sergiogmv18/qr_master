@@ -39,17 +39,17 @@ class _CreateQrScreenState extends State<CreateQrScreen> {
                 children: [
                   Expanded(
                     child: AppDropdown<BarcodeSpec>(
-                label: translate("code type"),
-                leadingIcon:  const Icon(Icons.qr_code_2, color: CustomColors.primary),
-                items:provider.entriesDropdownMenu,
-                value: provider.selectedDropdownItem,
-                onChanged: (val) {
-                  if (val == null) return;
-                  provider.updateSelectDropdownItem(val);
-                },
-                //width: MediaQuery.of(context).size.width - 32, // full-width con margen
-                enableFilter: false,
-              ),
+                      label: translate("code type"),
+                      leadingIcon:  const Icon(Icons.qr_code_2, color: CustomColors.primary),
+                      items:provider.entriesDropdownMenu,
+                      value: provider.selectedDropdownItem,
+                      onChanged: (val) {
+                        if (val == null) return;
+                        provider.updateSelectDropdownItem(val);
+                      },
+                      //width: MediaQuery.of(context).size.width - 32, // full-width con margen
+                      enableFilter: false,
+                    ),
                   
                   ),
                   if(provider.showSecundaryDropdownMenu)...[

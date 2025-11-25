@@ -3,7 +3,6 @@ import 'package:qr_master/components/circular_progress_indicator.dart';
 import 'package:qr_master/components/success_dialog.dart';
 import 'package:qr_master/config/route_app.dart';
 import 'package:qr_master/config/style.dart';
-import 'package:qr_master/controllers/qr_record_controller.dart';
 import 'package:qr_master/controllers/translation_controller.dart';
 import 'package:qr_master/database/qr_master_database.dart';
 import 'package:qr_master/services/function_class.dart';
@@ -28,10 +27,10 @@ class _ConfigScreenState extends State<ConfigScreen> {
         spacing: 10,
         children: [
 // Share app
-          showMenu(
-            title:translate("share app"),
-            leading: const Icon(Icons.share, color: CustomColors.primary)
-          ),
+          // showMenu(
+          //   title:translate("share app"),
+          //   leading: const Icon(Icons.share, color: CustomColors.primary)
+          // ),
 // WEB PORTFOLIO
           showMenu(
             title:translate("web - portfolio"), 

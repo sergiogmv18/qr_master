@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "298913960482",
+    "project_id": "qr-master-lector-de-qr",
+    "storage_bucket": "qr-master-lector-de-qr.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:298913960482:android:2cd69c173f957fb004707b",
+        "android_client_info": {
+          "package_name": "com.sgv.qr_master"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdigOJvNIWDXRXEONsA40ekeYiFQB9YrA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

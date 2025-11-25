@@ -77,7 +77,7 @@ class _ResultScanScreenState extends State<ResultScanScreen> {
                           )
                         ),
                         const SizedBox(height: 20),
-                        NativeAdCard(height: 300),
+                      // NativeAdCard(height: 300),
                         SizedBox(height: 24),
                       ],
                     ),

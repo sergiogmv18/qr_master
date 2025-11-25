@@ -36,7 +36,6 @@ dependencies:
   floor: ^1.5.0
   get_it: ^8.0.3
   google_maps_flutter: ^2.14.0
-  flutter_launcher_icons: ^0.14.4
   google_mobile_ads: ^6.0.0
   path_provider: ^2.1.5
   provider: ^6.1.5+1
@@ -54,6 +53,11 @@ dependencies:
   barcode: ^2.2.9
   intl_phone_number_input: ^0.7.5
   flutter_colorpicker: ^1.1.0
+  android_notification_icons: ^0.0.1
+  firebase_analytics: ^12.0.3
+  firebase_core: ^4.1.1
+  firebase_messaging: ^16.0.2
+  flutter_local_notifications: ^19.4.2
   share_plus: ^12.0.1
   pdf: ^3.11.3
   geolocator: ^12.0.0 
@@ -66,6 +70,7 @@ dev_dependencies:
     sdk: flutter
   floor_generator: ^1.5.0
   build_runner: ^2.4.1
+  flutter_launcher_icons: ^0.14.4
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -74,35 +79,35 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
 
-flutter_icons:
-  image_path: "assets/img/logo.jpg"
-  #adaptive_icon_foreground: "assets/mr_Coolz.jpg"
-  android: true
+flutter_launcher_icons:
+  android: true 
+  image_path: "assets/img/logo.png"
+  
+
 
 flutter_native_splash:
   # Fondo (light/dark) – usa tu paleta
   color: "#0D1826"         # light bg
   color_dark: "#0D1826"    # dark bg
-
   # Imagen principal (centrada)
-  image: "assets/img/logo_padding.jpg"
-  image_dark: "assets/img/logo_padding.jpg"
-
+  image: "assets/img/logo_splash.png"
+  image_dark: "assets/img/logo_splash.png"
   # Branding debajo (opcional)
   # branding: assets/branding/brand.png
   #branding_dark: assets/branding/brand.png
-
   # Ajustes de plataforma
   android: true
   android_gravity: center
   fullscreen: true
-
 # Android 12+ (obligatorio definir bloque)
   android_12:
-    image: assets/img/logo_padding.jpg
-    image_dark: assets/img/logo_padding.jpg
+    image: assets/img/logo_splash.png
+    image_dark: assets/img/logo_splash.png
   # color de fondo hereda de color/color_dark
 
+android_notification_icons:
+  image_path: 'assets/img/logo.png'
+  icon_name: 'ic_notification' # optional
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
